@@ -166,6 +166,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#freq"><i class="fa fa-check"></i>FREQ</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_origin"><i class="fa fa-check"></i>COUNTRY_ORIGIN</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_destination"><i class="fa fa-check"></i>COUNTRY_DESTINATION</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#type_trx"><i class="fa fa-check"></i>TYPE_TRX</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#type_psp"><i class="fa fa-check"></i>TYPE_PSP</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="analisis-bivariado.html"><a href="analisis-bivariado.html"><i class="fa fa-check"></i><b>3</b> Analisis Bivariado</a>
@@ -1582,6 +1584,347 @@ South Africa
 <p><strong>Extra EEA:</strong> Hace referencia a los demás paises y entidades del Espacio Económico Europeo, incluyendo Noruega, Islandia y Liechtenstein.</p>
 <p><strong>Other EEA countries (all countries excluding the reference area):</strong> Hace referencia a los demás paises y entidades del Espacio Económico Europeo excluyendo al país de origen</p>
 </blockquote>
+</div>
+</div>
+<div id="type_trx" class="section level3 unnumbered hasAnchor">
+<h3>TYPE_TRX<a href="analisis-univariado.html#type_trx" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Describe el tipo de movimiento bancario realizado.</p>
+<div id="tabla-4" class="section level4 unnumbered hasAnchor">
+<h4>Tabla<a href="analisis-univariado.html#tabla-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="analisis-univariado.html#cb21-1" tabindex="-1"></a>lookup_instrument <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb21-2"><a href="analisis-univariado.html#cb21-2" tabindex="-1"></a>  <span class="at">Categoria =</span> <span class="fu">c</span>(<span class="st">&quot;CHQ&quot;</span>,<span class="st">&quot;CP0&quot;</span>,<span class="st">&quot;CT0&quot;</span>,<span class="st">&quot;CW1&quot;</span>,<span class="st">&quot;DD&quot;</span>,<span class="st">&quot;EMP0&quot;</span>,<span class="st">&quot;MREM&quot;</span>,<span class="st">&quot;ND0&quot;</span>,<span class="st">&quot;ND1&quot;</span>,<span class="st">&quot;ND2&quot;</span>,<span class="st">&quot;ND3&quot;</span>,<span class="st">&quot;SER&quot;</span>,<span class="st">&quot;TOTL&quot;</span>,<span class="st">&quot;TOTL1&quot;</span>),</span>
+<span id="cb21-3"><a href="analisis-univariado.html#cb21-3" tabindex="-1"></a>  <span class="at">NombreInstrumento =</span> <span class="fu">c</span>(</span>
+<span id="cb21-4"><a href="analisis-univariado.html#cb21-4" tabindex="-1"></a>    <span class="st">&quot;Cheques&quot;</span>,</span>
+<span id="cb21-5"><a href="analisis-univariado.html#cb21-5" tabindex="-1"></a>    <span class="st">&quot;Card payments&quot;</span>,</span>
+<span id="cb21-6"><a href="analisis-univariado.html#cb21-6" tabindex="-1"></a>    <span class="st">&quot;Credit transfers&quot;</span>,</span>
+<span id="cb21-7"><a href="analisis-univariado.html#cb21-7" tabindex="-1"></a>    <span class="st">&quot;Cash withdrawals using cards&quot;</span>,</span>
+<span id="cb21-8"><a href="analisis-univariado.html#cb21-8" tabindex="-1"></a>    <span class="st">&quot;Direct debits&quot;</span>,</span>
+<span id="cb21-9"><a href="analisis-univariado.html#cb21-9" tabindex="-1"></a>    <span class="st">&quot;E-money payments&quot;</span>,</span>
+<span id="cb21-10"><a href="analisis-univariado.html#cb21-10" tabindex="-1"></a>    <span class="st">&quot;Money remittances&quot;</span>,</span>
+<span id="cb21-11"><a href="analisis-univariado.html#cb21-11" tabindex="-1"></a>    <span class="st">&quot;Other services (not included in Directive (EU) 2013/2466)&quot;</span>,</span>
+<span id="cb21-12"><a href="analisis-univariado.html#cb21-12" tabindex="-1"></a>    <span class="st">&quot;Credits to the accounts by simple book entry&quot;</span>,</span>
+<span id="cb21-13"><a href="analisis-univariado.html#cb21-13" tabindex="-1"></a>    <span class="st">&quot;Debits from the accounts by simple book entry&quot;</span>,</span>
+<span id="cb21-14"><a href="analisis-univariado.html#cb21-14" tabindex="-1"></a>    <span class="st">&quot;Other services than credits and debits from the accounts by simple book entry&quot;</span>,</span>
+<span id="cb21-15"><a href="analisis-univariado.html#cb21-15" tabindex="-1"></a>    <span class="st">&quot;Other payment services&quot;</span>,</span>
+<span id="cb21-16"><a href="analisis-univariado.html#cb21-16" tabindex="-1"></a>    <span class="st">&quot;Total payment transactions&quot;</span>,</span>
+<span id="cb21-17"><a href="analisis-univariado.html#cb21-17" tabindex="-1"></a>    <span class="st">&quot;Total payment transactions, excluding cash withdrawals&quot;</span></span>
+<span id="cb21-18"><a href="analisis-univariado.html#cb21-18" tabindex="-1"></a>  )</span>
+<span id="cb21-19"><a href="analisis-univariado.html#cb21-19" tabindex="-1"></a>)</span>
+<span id="cb21-20"><a href="analisis-univariado.html#cb21-20" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="analisis-univariado.html#cb21-21" tabindex="-1"></a>tabla_typetrx <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-22"><a href="analisis-univariado.html#cb21-22" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>TYPE_TRX, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-23"><a href="analisis-univariado.html#cb21-23" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-24"><a href="analisis-univariado.html#cb21-24" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frecuencia)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-25"><a href="analisis-univariado.html#cb21-25" tabindex="-1"></a> </span>
+<span id="cb21-26"><a href="analisis-univariado.html#cb21-26" tabindex="-1"></a>  <span class="fu">left_join</span>(lookup_instrument, <span class="at">by =</span> <span class="st">&quot;Categoria&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb21-27"><a href="analisis-univariado.html#cb21-27" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Categoria =</span> <span class="fu">factor</span>(Categoria, <span class="at">levels =</span> Categoria)) </span>
+<span id="cb21-28"><a href="analisis-univariado.html#cb21-28" tabindex="-1"></a>  </span>
+<span id="cb21-29"><a href="analisis-univariado.html#cb21-29" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="analisis-univariado.html#cb21-30" tabindex="-1"></a><span class="fu">kable</span>(tabla_typetrx) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-31"><a href="analisis-univariado.html#cb21-31" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;400px&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
+<table>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Categoria
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Frecuencia
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Porcentaje
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+NombreInstrumento
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+DD
+</td>
+<td style="text-align:right;">
+96675
+</td>
+<td style="text-align:right;">
+14.59
+</td>
+<td style="text-align:left;">
+Direct debits
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CT0
+</td>
+<td style="text-align:right;">
+96663
+</td>
+<td style="text-align:right;">
+14.59
+</td>
+<td style="text-align:left;">
+Credit transfers
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EMP0
+</td>
+<td style="text-align:right;">
+92772
+</td>
+<td style="text-align:right;">
+14.00
+</td>
+<td style="text-align:left;">
+E-money payments
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHQ
+</td>
+<td style="text-align:right;">
+92173
+</td>
+<td style="text-align:right;">
+13.91
+</td>
+<td style="text-align:left;">
+Cheques
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CP0
+</td>
+<td style="text-align:right;">
+59765
+</td>
+<td style="text-align:right;">
+9.02
+</td>
+<td style="text-align:left;">
+Card payments
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SER
+</td>
+<td style="text-align:right;">
+56997
+</td>
+<td style="text-align:right;">
+8.60
+</td>
+<td style="text-align:left;">
+Other payment services
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MREM
+</td>
+<td style="text-align:right;">
+52272
+</td>
+<td style="text-align:right;">
+7.89
+</td>
+<td style="text-align:left;">
+Money remittances
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TOTL
+</td>
+<td style="text-align:right;">
+48151
+</td>
+<td style="text-align:right;">
+7.27
+</td>
+<td style="text-align:left;">
+Total payment transactions
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TOTL1
+</td>
+<td style="text-align:right;">
+44336
+</td>
+<td style="text-align:right;">
+6.69
+</td>
+<td style="text-align:left;">
+Total payment transactions, excluding cash withdrawals
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CW1
+</td>
+<td style="text-align:right;">
+18738
+</td>
+<td style="text-align:right;">
+2.83
+</td>
+<td style="text-align:left;">
+Cash withdrawals using cards
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ND1
+</td>
+<td style="text-align:right;">
+1624
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:left;">
+Credits to the accounts by simple book entry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ND2
+</td>
+<td style="text-align:right;">
+1624
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:left;">
+Debits from the accounts by simple book entry
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ND0
+</td>
+<td style="text-align:right;">
+415
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:left;">
+Other services (not included in Directive (EU) 2013/2466)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ND3
+</td>
+<td style="text-align:right;">
+411
+</td>
+<td style="text-align:right;">
+0.06
+</td>
+<td style="text-align:left;">
+Other services than credits and debits from the accounts by simple book entry
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="gráfico-4" class="section level4 unnumbered hasAnchor">
+<h4>Gráfico<a href="analisis-univariado.html#gr%C3%A1fico-4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="analisis-univariado.html#cb22-1" tabindex="-1"></a><span class="co"># Gráfico</span></span>
+<span id="cb22-2"><a href="analisis-univariado.html#cb22-2" tabindex="-1"></a>tabla_typetrx <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="analisis-univariado.html#cb22-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Categoria), <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="analisis-univariado.html#cb22-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="analisis-univariado.html#cb22-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">2.2</span>) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="analisis-univariado.html#cb22-6" tabindex="-1"></a> </span>
+<span id="cb22-7"><a href="analisis-univariado.html#cb22-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="analisis-univariado.html#cb22-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de transacción&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="analisis-univariado.html#cb22-9" tabindex="-1"></a> </span>
+<span id="cb22-10"><a href="analisis-univariado.html#cb22-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="analisis-univariado.html#cb22-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb22-12"><a href="analisis-univariado.html#cb22-12" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-13"><a href="analisis-univariado.html#cb22-13" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb22-14"><a href="analisis-univariado.html#cb22-14" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb22-15"><a href="analisis-univariado.html#cb22-15" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-16"><a href="analisis-univariado.html#cb22-16" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)  </span>
+<span id="cb22-17"><a href="analisis-univariado.html#cb22-17" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" /></p>
+<p>La tabla y gráfico anteriores describen la distribución de la variable <strong>TYPE_TRX</strong> del dataset, que permite caracterizar el movimiento bancario realizado y su instrumento. Los debitos directos y transferencias de credito son las categorías más grandes con un porcentaje del 14.59% cada una, seguida por pagos electronicos (13.91%) y cheques (9.02%). El pago por tarjetas de credito predomina ligeramente sobre otros servicios de pago, observandose un 9.02% sobre un 8.60%. Con aproximadamente un 1% de participación la categorías ND* son marginales y podría considerarse su agrupación. Mientras que las columnas de TOTL y TOLT representan rotales agregados, no instrumentos individuales.</p>
+</div>
+</div>
+<div id="type_psp" class="section level3 unnumbered hasAnchor">
+<h3>TYPE_PSP<a href="analisis-univariado.html#type_psp" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Caracteriza al proveedor que realiza la transacción. Se categoriza en:</p>
+<p><strong>- 1 Payer’s PSP:</strong> Proveedor de servicios de pago del pagador. Entidad que procesa el pago de quien envía el dinero.</p>
+<p><strong>- 2 Payee’s PSP:</strong> Proveedor de servicios de pago del beneficiario. Entidad que procesa el pago de quien recibe el dinero.</p>
+<p>**- _Z NA:** Transacciones sin rol definifido o internas.</p>
+<div id="tabla-5" class="section level4 unnumbered hasAnchor">
+<h4>Tabla<a href="analisis-univariado.html#tabla-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="analisis-univariado.html#cb23-1" tabindex="-1"></a>tabla_psp <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="analisis-univariado.html#cb23-2" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>TYPE_PSP, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="analisis-univariado.html#cb23-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span>
+<span id="cb23-4"><a href="analisis-univariado.html#cb23-4" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="analisis-univariado.html#cb23-5" tabindex="-1"></a><span class="fu">kable</span>(tabla_psp)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Categoria</th>
+<th align="right">Frecuencia</th>
+<th align="right">Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">387724</td>
+<td align="right">58.51</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">270818</td>
+<td align="right">40.87</td>
+</tr>
+<tr class="odd">
+<td align="left">_Z</td>
+<td align="right">4074</td>
+<td align="right">0.61</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="gráfico-5" class="section level4 unnumbered hasAnchor">
+<h4>Gráfico<a href="analisis-univariado.html#gr%C3%A1fico-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="analisis-univariado.html#cb24-1" tabindex="-1"></a><span class="co"># Gráfico</span></span>
+<span id="cb24-2"><a href="analisis-univariado.html#cb24-2" tabindex="-1"></a>tabla_psp <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="analisis-univariado.html#cb24-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Categoria), <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="analisis-univariado.html#cb24-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="analisis-univariado.html#cb24-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="analisis-univariado.html#cb24-6" tabindex="-1"></a> </span>
+<span id="cb24-7"><a href="analisis-univariado.html#cb24-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="analisis-univariado.html#cb24-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de transacción&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-9"><a href="analisis-univariado.html#cb24-9" tabindex="-1"></a> </span>
+<span id="cb24-10"><a href="analisis-univariado.html#cb24-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="analisis-univariado.html#cb24-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb24-12"><a href="analisis-univariado.html#cb24-12" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb24-13"><a href="analisis-univariado.html#cb24-13" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb24-14"><a href="analisis-univariado.html#cb24-14" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb24-15"><a href="analisis-univariado.html#cb24-15" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb24-16"><a href="analisis-univariado.html#cb24-16" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)  </span>
+<span id="cb24-17"><a href="analisis-univariado.html#cb24-17" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-20-1.png" alt="" width="672" /></p>
+<p>La tabla y gráfico anteriores describen la distribución de la variable <strong>TYPE_PSP</strong> del dataset, que permite caracterizar el rol de la transacción. El 58.51% de las transacciones se registraron desde el psp del pagador, esto es 387.724, frente a 270.818 o 40.87% asociadas al psp del beneficiario. Por otro lado, se tiene un 0.61% de transacciones no asociadas a ninguna de las clasificaciones anteriores, quizá por tratarse de movimientos monetarios internos.</p>
 
 </div>
 </div>
