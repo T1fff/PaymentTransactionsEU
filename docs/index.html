@@ -141,7 +141,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Contexto inicial</a></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Contexto inicial</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivo-del-an%C3%A1lisis"><i class="fa fa-check"></i>Objetivo del análisis</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#origen-y-descripci%C3%B3n-del-dataset"><i class="fa fa-check"></i>Origen y descripción del dataset</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#diccionario-de-columnas"><i class="fa fa-check"></i>Diccionario de columnas</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#columnas-a-utilizar"><i class="fa fa-check"></i>Columnas a utilizar</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="2" data-path="analisis-univariado.html"><a href="analisis-univariado.html"><i class="fa fa-check"></i><b>2</b> Analisis Univariado</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="analisis-univariado.html"><a href="analisis-univariado.html#a-section"><i class="fa fa-check"></i><b>2.1</b> A section</a>
@@ -182,7 +191,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="contexto-inicial" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Contexto inicial<a href="index.html#contexto-inicial" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="objetivo-del-análisis" class="section level2 unnumbered hasAnchor">
+<h2>Objetivo del análisis<a href="index.html#objetivo-del-an%C3%A1lisis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Construir un análisis exploratorio de datos que caracterice la base de datos financiera proveniente de los bancos centrales de la Unión Europea para reconocer inicialmente incidencias repetitivas asociadas a casos de fraude.</p>
+</div>
+<div id="origen-y-descripción-del-dataset" class="section level2 unnumbered hasAnchor">
+<h2>Origen y descripción del dataset<a href="index.html#origen-y-descripci%C3%B3n-del-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El presente dataset muestra estadisticas de alto nivel sobre el total de transacciones financieras legales y fraudulentas realizadas en la Unión Europea. Esta información es recolectada por el Banco Central Europeo (ECB), entidad que valida semestralmente los reportes enviados por los Bancos Centrales Nacionales de cada país del continente. La última actualización realizada fue hecha el 29 de enero del presente año y se encuentra disponible en el repositorio publico de datos del ECB.</p>
+<div id="caracterización-general" class="section level3 unnumbered hasAnchor">
+<h3>Caracterización general<a href="index.html#caracterizaci%C3%B3n-general" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como veremos a continuación, el dataset cuenta con <strong>662.616</strong> transacciones documentadas por el ECB. De cada una se caracterizan <strong>29</strong> columnas que serán descritas en la siguiente sección.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="fu">nrow</span>(df)</span></code></pre></div>
+<pre><code>## [1] 662616</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" tabindex="-1"></a><span class="fu">ncol</span>(df)</span></code></pre></div>
+<pre><code>## [1] 29</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" tabindex="-1"></a><span class="fu">names</span>(df)</span></code></pre></div>
+<pre><code>##  [1] &quot;KEY&quot;              &quot;FREQ&quot;             &quot;REF_AREA&quot;         &quot;COUNT_AREA&quot;      
+##  [5] &quot;TYP_TRNSCTN&quot;      &quot;RL_TRNSCTN&quot;       &quot;FRD_TYP&quot;          &quot;TRANSFORMATION&quot;  
+##  [9] &quot;UNIT_MEASURE&quot;     &quot;TIME_PERIOD&quot;      &quot;OBS_VALUE&quot;        &quot;OBS_STATUS&quot;      
+## [13] &quot;CONF_STATUS&quot;      &quot;PRE_BREAK_VALUE&quot;  &quot;COMMENT_OBS&quot;      &quot;TIME_FORMAT&quot;     
+## [17] &quot;BREAKS&quot;           &quot;COMMENT_TS&quot;       &quot;COMPILING_ORG&quot;    &quot;DISS_ORG&quot;        
+## [21] &quot;TIME_PER_COLLECT&quot; &quot;COVERAGE&quot;         &quot;DATA_COMP&quot;        &quot;DECIMALS&quot;        
+## [25] &quot;METHOD_REF&quot;       &quot;TITLE&quot;            &quot;TITLE_COMPL&quot;      &quot;UNIT&quot;            
+## [29] &quot;UNIT_MULT&quot;</code></pre>
+</div>
+<div id="diccionario-de-columnas" class="section level3 unnumbered hasAnchor">
+<h3>Diccionario de columnas<a href="index.html#diccionario-de-columnas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>1. KEY:</strong> Identificador de transacción.</p>
+<p><strong>2. FREQ:</strong> Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.).</p>
+<p><strong>3. REF_AREA:</strong> País origen de la transacción.</p>
+<p><strong>4. COUNT_AREA:</strong> Institución origen de la transacción.</p>
+<p><strong>5. TYP_TRNSCTN:</strong> Clasificación de la transacción (Depósito, retiro, cheques, transferencias, etc.).</p>
+<p><strong>6. RL_TRNSCTN:</strong> Clasificación de la entidad procesa la transacción.</p>
+<p><strong>7. FRD_TYP:</strong> Clasificación del fraude (No autorizado, tarjeta robada, sin fraude, etc).</p>
+<p><strong>8. TRANSFORMATION:</strong> Transformación realizada a la transacción (niveles anuales, contribución a la tasa, promedio móvil, no aplica).</p>
+<p><strong>9. UNIT_MEASURE:</strong> Divisa involucrada en la transacción.</p>
+<p><strong>10. TIME_PERIOD:</strong> Año en el que se procesó la transacción.</p>
+<p><strong>11. OBS_VALUE:</strong> Monto de la transacción.</p>
+<p><strong>12. OBS_STATUS:</strong> Clasificación del monto de la transacción (revisado, no validado, valor provisional, etc).</p>
+<p><strong>13. CONF_STATUS:</strong> Clasificación de confidencialidad (Libre, restringido, etc).</p>
+<p><strong>14. PRE_BREAK_VALUE:</strong> No especificada en la documentación.</p>
+<p><strong>15. COMMENT_OBS:</strong> Observaciones.</p>
+<p><strong>16. TIME_FORMAT:</strong> Columna copia de FREQ.</p>
+<p><strong>17. BREAKS:</strong> No especificada en la documentación.</p>
+<p><strong>18. COMMENT_TS:</strong> No especificada en la documentación.</p>
+<p><strong>19. COMPILING_ORG:</strong> No especificada en la documentación.</p>
+<p><strong>20. DISS_ORG:</strong> No especificada en la documentación.</p>
+<p><strong>21. TIME_PER_COLLECT:</strong> No especificada en la documentación.</p>
+<p><strong>22. COVERAGE:</strong> No especificada en la documentación.</p>
+<p><strong>23. DATA_COMP:</strong> No especificada en la documentación.</p>
+<p><strong>24. DECIMALS:</strong> Indica la cantidad de decimales presentes en el monto.</p>
+<p><strong>25. METHOD_REF:</strong> Metodolofia utilizada para la recolección del dato.</p>
+<p><strong>26. TITLE:</strong> Descripción de transacción.</p>
+<p><strong>27. TITLE_COMPL:</strong> Columna copia de TITLE.</p>
+<p><strong>28. UNIT:</strong> Columna copia de UNIT_MEASURE.</p>
+<p><strong>29. UNIT_MULT:</strong> Indica el multiplicador del monto de la transacción.</p>
+</div>
+<div id="columnas-a-utilizar" class="section level3 unnumbered hasAnchor">
+<h3>Columnas a utilizar<a href="index.html#columnas-a-utilizar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Con el objetivo de reducir el ruido en esta exploración se hace necesario ignorar ciertas columnas en esta exploración. Si se analiza detenidamente, hay columnas cuya información no se encuentra adecuadamente documentada en el origen de los datos, dificultando así la clasificación de su impacto en el conjunto de datos Del mismo modo, se encuentran varias columnas con información duplicada. Por tanto, solo se tendrán en cuenta las columnas listadas a continuación:</p>
+<p><strong>1. KEY:</strong> Identificador de transacción.</p>
+<p><strong>2. FREQ:</strong> Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.)</p>
+<p><strong>3. REF_AREA:</strong> País origen de la transacción.</p>
+<p><strong>4. COUNT_AREA:</strong> Institución origen de la transacción.</p>
+<p><strong>5. TYP_TRNSCTN:</strong> Clasificación de la transacción (Depósito, retiro, cheques, transferencias, etc.).</p>
+<p><strong>6. RL_TRNSCTN:</strong> Clasificación de la entidad procesa la transacción.</p>
+<p><strong>7. FRD_TYP:</strong> Clasificación del fraude (No autorizado, tarjeta robada, sin fraude, etc).</p>
+<p><strong>9. UNIT_MEASURE:</strong> Divisa involucrada en la transacción.</p>
+<p><strong>10. TIME_PERIOD:</strong> Año en el que se procesó la transacción.</p>
+<p><strong>11. OBS_VALUE:</strong> Monto de la transacción.</p>
+<p><strong>12. OBS_STATUS:</strong> Clasificación del monto de la transacción (revisado, no validado, valor provisional, etc).</p>
+<p><strong>24. DECIMALS:</strong> Indica la cantidad de decimales presentes en el monto.</p>
+<p><strong>26. TITLE:</strong> Descripción de transacción.</p>
+<p><strong>29. UNIT_MULT:</strong> Indica el multiplicador del monto de la transacción.</p>
 
+</div>
+</div>
 </div>
             </section>
 
