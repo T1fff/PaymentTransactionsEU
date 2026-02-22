@@ -159,9 +159,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="analisis-univariado.html"><a href="analisis-univariado.html"><i class="fa fa-check"></i><b>2</b> Analisis Univariado</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="analisis-univariado.html"><a href="analisis-univariado.html#a-section"><i class="fa fa-check"></i><b>2.1</b> A section</a>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#target-variable-type_fraud"><i class="fa fa-check"></i>Target Variable: TYPE_FRAUD</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#variables-caracter%C3%ADsticas"><i class="fa fa-check"></i>Variables Características</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#categ%C3%B3ricas"><i class="fa fa-check"></i>Categóricas</a>
 <ul>
-<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#freq"><i class="fa fa-check"></i>FREQ</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="analisis-bivariado.html"><a href="analisis-bivariado.html"><i class="fa fa-check"></i><b>3</b> Analisis Bivariado</a>
@@ -192,13 +194,114 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="analisis-univariado" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Analisis Univariado<a href="analisis-univariado.html#analisis-univariado" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>All chapters start with a first-level heading followed by your chapter title, like the line above. There should be only one first-level heading (<code>#</code>) per .Rmd file.</p>
-<div id="a-section" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> A section<a href="analisis-univariado.html#a-section" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>All chapter sections start with a second-level (<code>##</code>) or higher heading followed by your section title, like the sections above and below here. You can have as many as you want within a chapter.</p>
-<div id="an-unnumbered-section" class="section level3 unnumbered hasAnchor">
-<h3>An unnumbered section<a href="analisis-univariado.html#an-unnumbered-section" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Chapters and sections are numbered by default. To un-number a heading, add a <code>{.unnumbered}</code> or the shorter <code>{-}</code> at the end of the heading, like in this section.</p>
+<p>A continuación se procederá a examinar cada variable de forma individual con el objetivo de entender su distribución, medidas centrales y de dispersión. Para complementar el análisis utilizaremos tablas estadísticas y gráficas según se considere adecuado.</p>
+<div id="target-variable-type_fraud" class="section level2 unnumbered hasAnchor">
+<h2>Target Variable: TYPE_FRAUD<a href="analisis-univariado.html#target-variable-type_fraud" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="tabla" class="section level4 unnumbered hasAnchor">
+<h4>Tabla<a href="analisis-univariado.html#tabla" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="analisis-univariado.html#cb13-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="analisis-univariado.html#cb13-2" tabindex="-1"></a>  <span class="fu">count</span>(TYPE_FRAUD) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="analisis-univariado.html#cb13-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span><span class="fu">sum</span>(n))<span class="sc">*</span><span class="dv">100</span>) <span class="ot">-&gt;</span> fraud_summary</span>
+<span id="cb13-4"><a href="analisis-univariado.html#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="analisis-univariado.html#cb13-5" tabindex="-1"></a><span class="fu">kable</span>(fraud_summary)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">TYPE_FRAUD</th>
+<th align="right">n</th>
+<th align="right">porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">F</td>
+<td align="right">1944</td>
+<td align="right">0.2933826</td>
+</tr>
+<tr class="even">
+<td align="left">_Z</td>
+<td align="right">660672</td>
+<td align="right">99.7066174</td>
+</tr>
+</tbody>
+</table>
+<p>La variable <strong>TYPE_FRAUD</strong> representa la clasificación del fraude indentificado en una transacción. Del total de observaciones, 660.672 no están relacionadas a un caso de fraude, mientras que 1944 transacciones fueron marcadas como movimientos fraudulentos. Debido al alto desequilibrio entre las observaciones legales y las transacciones fraudulentas se debe tener mucha precaución a la hora de construir el modelo de predicción.</p>
+</div>
+<div id="gráfico" class="section level4 unnumbered hasAnchor">
+<h4>Gráfico<a href="analisis-univariado.html#gr%C3%A1fico" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="analisis-univariado.html#cb14-1" tabindex="-1"></a><span class="co"># Crear tabla de frecuencias para department</span></span>
+<span id="cb14-2"><a href="analisis-univariado.html#cb14-2" tabindex="-1"></a>tabla_y <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="analisis-univariado.html#cb14-3" tabindex="-1"></a>  <span class="fu">count</span>(TYPE_FRAUD, <span class="at">name =</span> <span class="st">&quot;Fraude&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="analisis-univariado.html#cb14-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Fraude <span class="sc">/</span> <span class="fu">sum</span>(Fraude) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb14-5"><a href="analisis-univariado.html#cb14-5" tabindex="-1"></a>         <span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Fraude, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>))</span>
+<span id="cb14-6"><a href="analisis-univariado.html#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="analisis-univariado.html#cb14-7" tabindex="-1"></a><span class="co"># Gráfico</span></span>
+<span id="cb14-8"><a href="analisis-univariado.html#cb14-8" tabindex="-1"></a>tabla_y <span class="sc">%&gt;%</span> </span>
+<span id="cb14-9"><a href="analisis-univariado.html#cb14-9" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(TYPE_FRAUD), <span class="at">y =</span> Fraude)) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="analisis-univariado.html#cb14-10" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="analisis-univariado.html#cb14-11" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="analisis-univariado.html#cb14-12" tabindex="-1"></a> </span>
+<span id="cb14-13"><a href="analisis-univariado.html#cb14-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="analisis-univariado.html#cb14-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Tipo de transacción&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-15"><a href="analisis-univariado.html#cb14-15" tabindex="-1"></a> </span>
+<span id="cb14-16"><a href="analisis-univariado.html#cb14-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">14</span>) <span class="sc">+</span></span>
+<span id="cb14-17"><a href="analisis-univariado.html#cb14-17" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb14-18"><a href="analisis-univariado.html#cb14-18" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-19"><a href="analisis-univariado.html#cb14-19" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb14-20"><a href="analisis-univariado.html#cb14-20" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb14-21"><a href="analisis-univariado.html#cb14-21" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-22"><a href="analisis-univariado.html#cb14-22" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)  </span>
+<span id="cb14-23"><a href="analisis-univariado.html#cb14-23" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" />
+Este gráfico muestra la distribución del tipo de transacción, confirmando que la mayoria de transacciones observadas no fueron marcadas como fraude. Puntualmente el 99.7% de las transacciones fueron consideradas legales, mientras que el 0.3% fueron asociadas con algún comportamiento irregular. Esta notable diferencia indica un alto desbalance en las clases de la variable objetivo, lo cual es importante destacar al momento de construir modelos predictivos.</p>
+</div>
+</div>
+<div id="variables-características" class="section level2 unnumbered hasAnchor">
+<h2>Variables Características<a href="analisis-univariado.html#variables-caracter%C3%ADsticas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A continuación se examinarán detenidamente cada una de las variables.</p>
+</div>
+<div id="categóricas" class="section level2 unnumbered hasAnchor">
+<h2>Categóricas<a href="analisis-univariado.html#categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="freq" class="section level3 unnumbered hasAnchor">
+<h3>FREQ<a href="analisis-univariado.html#freq" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="analisis-univariado.html#cb15-1" tabindex="-1"></a>tabla_freq <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="analisis-univariado.html#cb15-2" tabindex="-1"></a>  <span class="fu">count</span>(FREQ, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="analisis-univariado.html#cb15-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb15-4"><a href="analisis-univariado.html#cb15-4" tabindex="-1"></a>         <span class="at">Variable =</span> <span class="st">&quot;FREQ&quot;</span>,</span>
+<span id="cb15-5"><a href="analisis-univariado.html#cb15-5" tabindex="-1"></a>         <span class="at">Categoria =</span> FREQ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="analisis-univariado.html#cb15-6" tabindex="-1"></a>  <span class="fu">select</span>(Variable, Categoria, Frecuencia, Porcentaje)</span>
+<span id="cb15-7"><a href="analisis-univariado.html#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="analisis-univariado.html#cb15-8" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">bind_rows</span>(tabla_freq))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Categoria</th>
+<th align="right">Frecuencia</th>
+<th align="right">Porcentaje</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FREQ</td>
+<td align="left">A</td>
+<td align="right">275179</td>
+<td align="right">41.53</td>
+</tr>
+<tr class="even">
+<td align="left">FREQ</td>
+<td align="left">H</td>
+<td align="right">236884</td>
+<td align="right">35.75</td>
+</tr>
+<tr class="odd">
+<td align="left">FREQ</td>
+<td align="left">Q</td>
+<td align="right">150553</td>
+<td align="right">22.72</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
