@@ -164,7 +164,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#categ%C3%B3ricas"><i class="fa fa-check"></i>Categóricas</a>
 <ul>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#freq"><i class="fa fa-check"></i>FREQ</a></li>
-<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country"><i class="fa fa-check"></i>COUNTRY</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_origin"><i class="fa fa-check"></i>COUNTRY_ORIGIN</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_destination"><i class="fa fa-check"></i>COUNTRY_DESTINATION</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="analisis-bivariado.html"><a href="analisis-bivariado.html"><i class="fa fa-check"></i><b>3</b> Analisis Bivariado</a>
@@ -292,8 +293,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Si se analiza detenidamente, se encuentran varias columnas con información duplicada. Del mismo modo, hay columnas cuya información no se encuentra adecuadamente documentada dificultando así la clasificación de su impacto en el conjunto de datos. Por tanto, solo se tendrán en cuenta las columnas listadas a continuación:</p>
 <p><strong>1. KEY &gt;&gt; ID:</strong> Identificador de transacción.</p>
 <p><strong>2. FREQ:</strong> Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.)</p>
-<p><strong>3. REF_AREA &gt;&gt; COUNTRY:</strong> País origen de la transacción.</p>
-<p><strong>4. COUNT_AREA &gt;&gt; ORGANIZATION:</strong> Institución origen de la transacción.</p>
+<p><strong>3. REF_AREA &gt;&gt; COUNTRY_ORIGIN:</strong> País origen de la transacción.</p>
+<p><strong>4. COUNT_AREA &gt;&gt; COUNTRY_DESTINATION:</strong> Institución origen de la transacción.</p>
 <p><strong>5. TYP_TRNSCTN &gt;&gt; TYPE_TRX :</strong> Clasificación de la transacción (Depósito, retiro, cheques, transferencias, etc.).</p>
 <p><strong>6. RL_TRNSCTN &gt;&gt; TYPE_PSP :</strong> Clasificación de la entidad procesa la transacción.</p>
 <p><strong>7. FRD_TYP &gt;&gt; TYPE_FRAUD:</strong> Clasificación del fraude (No autorizado, tarjeta robada, sin fraude, etc).</p>
@@ -308,7 +309,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="dataframe-resultante" class="section level3 unnumbered hasAnchor">
 <h3>Dataframe resultante<a href="index.html#dataframe-resultante" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="index.html#cb9-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">ID=</span>KEY, FREQ, <span class="at">COUNTRY=</span>REF_AREA, <span class="at">ORGANIZATION=</span>COUNT_AREA, <span class="at">TYPE_TRX=</span>TYP_TRNSCTN, <span class="at">TYPE_PSP=</span>RL_TRNSCTN, <span class="at">TYPE_FRAUD=</span>FRD_TYP, <span class="at">UNIT=</span>UNIT_MEASURE, <span class="at">YEAR=</span>TIME_PERIOD, <span class="at">AMOUNT=</span>OBS_VALUE, <span class="at">TYPE_AMOUNT=</span>OBS_STATUS, DECIMALS, <span class="at">DESCRIPTION=</span>TITLE, UNIT_MULT) <span class="ot">-&gt;</span> df</span>
+<span id="cb9-2"><a href="index.html#cb9-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">ID=</span>KEY, FREQ, <span class="at">COUNTRY_ORIGIN=</span>REF_AREA, <span class="at">COUNTRY_DESTINATION=</span>COUNT_AREA, <span class="at">TYPE_TRX=</span>TYP_TRNSCTN, <span class="at">TYPE_PSP=</span>RL_TRNSCTN, <span class="at">TYPE_FRAUD=</span>FRD_TYP, <span class="at">UNIT=</span>UNIT_MEASURE, <span class="at">YEAR=</span>TIME_PERIOD, <span class="at">AMOUNT=</span>OBS_VALUE, <span class="at">TYPE_AMOUNT=</span>OBS_STATUS, DECIMALS, <span class="at">DESCRIPTION=</span>TITLE, UNIT_MULT) <span class="ot">-&gt;</span> df</span>
 <span id="cb9-3"><a href="index.html#cb9-3" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="index.html#cb9-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df))  <span class="sc">%&gt;%</span> </span>
 <span id="cb9-5"><a href="index.html#cb9-5" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
@@ -323,10 +324,10 @@ ID
 FREQ
 </th>
 <th style="text-align:left;">
-COUNTRY
+COUNTRY_ORIGIN
 </th>
 <th style="text-align:left;">
-ORGANIZATION
+COUNTRY_DESTINATION
 </th>
 <th style="text-align:left;">
 TYPE_TRX
@@ -636,12 +637,12 @@ Total payment transactions, incl. cash withdrawals, sent to Bulgaria
 <p><img src="eda_payments_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="index.html#cb11-2" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
-<pre><code>##   NA_ID NA_FREQ NA_COUNTRY NA_ORGANIZATION NA_TYPE_TRX NA_TYPE_PSP
-## 1     0       0          0               0           0           0
-##   NA_TYPE_FRAUD NA_UNIT NA_YEAR NA_AMOUNT NA_TYPE_AMOUNT NA_DECIMALS
-## 1             0       0       0    143875              0           0
-##   NA_DESCRIPTION NA_UNIT_MULT
-## 1              0            0</code></pre>
+<pre><code>##   NA_ID NA_FREQ NA_COUNTRY_ORIGIN NA_COUNTRY_DESTINATION NA_TYPE_TRX
+## 1     0       0                 0                      0           0
+##   NA_TYPE_PSP NA_TYPE_FRAUD NA_UNIT NA_YEAR NA_AMOUNT NA_TYPE_AMOUNT
+## 1           0             0       0       0    143875              0
+##   NA_DECIMALS NA_DESCRIPTION NA_UNIT_MULT
+## 1           0              0            0</code></pre>
 <p>Al explorar un poco más el dataset, se encuentra que la mayoría de columnas tienen 0 valores faltantes en las observaciones. Aún así, es importante destacar que la columna AMOUNT concentra el total de missing values con 143875 NAs.</p>
 
 </div>

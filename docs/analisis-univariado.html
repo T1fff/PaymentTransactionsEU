@@ -164,7 +164,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#categ%C3%B3ricas"><i class="fa fa-check"></i>Categóricas</a>
 <ul>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#freq"><i class="fa fa-check"></i>FREQ</a></li>
-<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country"><i class="fa fa-check"></i>COUNTRY</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_origin"><i class="fa fa-check"></i>COUNTRY_ORIGIN</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_destination"><i class="fa fa-check"></i>COUNTRY_DESTINATION</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="analisis-bivariado.html"><a href="analisis-bivariado.html"><i class="fa fa-check"></i><b>3</b> Analisis Bivariado</a>
@@ -319,8 +320,8 @@ Este gráfico muestra la distribución del tipo de transacción, confirmando que
 <p>La tabla y gráfico anteriores describen la distribución de la variable <strong>FREQ</strong> del dataset, que permite caracterizar la recurrencia habitual de las transacciones. Las transacciones anuales (A) representan un 41.53% del total, mientras que la frecuencia semestral (H) y trimestral (Q) agrupan un 35.75% y 22.72%, cada una. En números exactos esto es 275.179, 236.884 y 150.553 transacciones respectivamente.</p>
 </div>
 </div>
-<div id="country" class="section level3 unnumbered hasAnchor">
-<h3>COUNTRY<a href="analisis-univariado.html#country" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="country_origin" class="section level3 unnumbered hasAnchor">
+<h3>COUNTRY_ORIGIN<a href="analisis-univariado.html#country_origin" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Presenta el código del país origen del movimiento bancario.</p>
 <div id="tabla-2" class="section level4 unnumbered hasAnchor">
 <h4>Tabla<a href="analisis-univariado.html#tabla-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
@@ -330,7 +331,7 @@ Este gráfico muestra la distribución del tipo de transacción, confirmando que
 <span id="cb17-4"><a href="analisis-univariado.html#cb17-4" tabindex="-1"></a>)</span>
 <span id="cb17-5"><a href="analisis-univariado.html#cb17-5" tabindex="-1"></a></span>
 <span id="cb17-6"><a href="analisis-univariado.html#cb17-6" tabindex="-1"></a>tabla_country <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb17-7"><a href="analisis-univariado.html#cb17-7" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>COUNTRY, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-7"><a href="analisis-univariado.html#cb17-7" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>COUNTRY_ORIGIN, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb17-8"><a href="analisis-univariado.html#cb17-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb17-9"><a href="analisis-univariado.html#cb17-9" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frecuencia)) <span class="sc">%&gt;%</span> </span>
 <span id="cb17-10"><a href="analisis-univariado.html#cb17-10" tabindex="-1"></a> </span>
@@ -773,12 +774,12 @@ Sweden
 <h4>Gráfico<a href="analisis-univariado.html#gr%C3%A1fico-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="analisis-univariado.html#cb18-1" tabindex="-1"></a><span class="co"># Gráfico</span></span>
 <span id="cb18-2"><a href="analisis-univariado.html#cb18-2" tabindex="-1"></a>tabla_country <span class="sc">%&gt;%</span> </span>
-<span id="cb18-3"><a href="analisis-univariado.html#cb18-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Categoria, <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="analisis-univariado.html#cb18-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Frecuencia, <span class="at">y =</span> Categoria)) <span class="sc">+</span></span>
 <span id="cb18-4"><a href="analisis-univariado.html#cb18-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb18-5"><a href="analisis-univariado.html#cb18-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">1.7</span>) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="analisis-univariado.html#cb18-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)), <span class="at">vjust =</span> <span class="fl">0.3</span>, <span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb18-6"><a href="analisis-univariado.html#cb18-6" tabindex="-1"></a> </span>
-<span id="cb18-7"><a href="analisis-univariado.html#cb18-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
-<span id="cb18-8"><a href="analisis-univariado.html#cb18-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;País&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="analisis-univariado.html#cb18-7" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="analisis-univariado.html#cb18-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>, <span class="at">y =</span> <span class="st">&quot;País&quot;</span>) <span class="sc">+</span></span>
 <span id="cb18-9"><a href="analisis-univariado.html#cb18-9" tabindex="-1"></a> </span>
 <span id="cb18-10"><a href="analisis-univariado.html#cb18-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
 <span id="cb18-11"><a href="analisis-univariado.html#cb18-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
@@ -789,9 +790,797 @@ Sweden
 <span id="cb18-16"><a href="analisis-univariado.html#cb18-16" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)  </span>
 <span id="cb18-17"><a href="analisis-univariado.html#cb18-17" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="eda_payments_files/figure-html/unnamed-chunk-14-1.png" alt="" width="672" /></p>
-<p>La tabla y gráfico anteriores describen la distribución de la variable <strong>COUNTRY</strong> del dataset, que permite caracterizar el origen de las transacciones. A simple vista se puede notar que los países tienen frecuencias muy similares, no hay único país que destaque de forma dominante frente a los demás. Romania, Hungría, Polonia, República Checa y Paises bajos son los 5 territorios con el porcentaje de origen más alto superior al 4% cada uno. Por otro lado, encontramos entidades especiales como la “Euro Area changing composition” y “EU changing composition” que presentan una baja frecuencia frente a otros mercados (menos del 1%).</p>
+<p>La tabla y gráfico anteriores describen la distribución de la variable <strong>COUNTRY_ORIGIN</strong> del dataset, que permite caracterizar el origen de las transacciones. A simple vista se puede notar que los países tienen frecuencias muy similares, no hay único país que destaque de forma dominante frente a los demás. Romania, Hungría, Polonia, República Checa y Paises bajos son los 5 territorios con el porcentaje de origen más alto superior al 4% cada uno. Por otro lado, encontramos entidades especiales como la “Euro Area changing composition” y “EU changing composition” que presentan una baja frecuencia frente a otros mercados (menos del 1%).</p>
 <blockquote>
 <p><strong>Euro Area changing composition/EU changing composition</strong>: hace referencia a países que han sido incluidos/excluidos de la zona del euro o en la unión europea en el transcurso de los años. Por ejemplo, Grecia se incorporó al uso del euro en el año 2000, mientras que Groenlandia que se retiró de la Unión Europea (anteriormente Comunidad Europea) en 1985.</p>
+</blockquote>
+</div>
+</div>
+<div id="country_destination" class="section level3 unnumbered hasAnchor">
+<h3>COUNTRY_DESTINATION<a href="analisis-univariado.html#country_destination" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Presenta el código del país destino del movimiento bancario.</p>
+<div id="tabla-3" class="section level4 unnumbered hasAnchor">
+<h4>Tabla<a href="analisis-univariado.html#tabla-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="analisis-univariado.html#cb19-1" tabindex="-1"></a>lookup_org <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb19-2"><a href="analisis-univariado.html#cb19-2" tabindex="-1"></a>  <span class="at">Categoria =</span> <span class="fu">c</span>(<span class="st">&quot;W0&quot;</span>,<span class="st">&quot;W1&quot;</span>,<span class="st">&quot;W2&quot;</span>,<span class="st">&quot;G1&quot;</span>,<span class="st">&quot;SE&quot;</span>,<span class="st">&quot;DK&quot;</span>,<span class="st">&quot;BG&quot;</span>,<span class="st">&quot;GR&quot;</span>,<span class="st">&quot;AT&quot;</span>,<span class="st">&quot;BE&quot;</span>,<span class="st">&quot;SI&quot;</span>,<span class="st">&quot;SK&quot;</span>,<span class="st">&quot;CY&quot;</span>,<span class="st">&quot;ES&quot;</span>,<span class="st">&quot;FI&quot;</span>,<span class="st">&quot;FR&quot;</span>,<span class="st">&quot;IT&quot;</span>,<span class="st">&quot;DE&quot;</span>,<span class="st">&quot;IE&quot;</span>,<span class="st">&quot;EE&quot;</span>,<span class="st">&quot;LU&quot;</span>,<span class="st">&quot;MT&quot;</span>,<span class="st">&quot;LV&quot;</span>,<span class="st">&quot;HR&quot;</span>,<span class="st">&quot;LT&quot;</span>,<span class="st">&quot;PT&quot;</span>,<span class="st">&quot;CZ&quot;</span>,<span class="st">&quot;PL&quot;</span>,<span class="st">&quot;HU&quot;</span>,<span class="st">&quot;RO&quot;</span>,<span class="st">&quot;NL&quot;</span>,<span class="st">&quot;G3&quot;</span>,<span class="st">&quot;NO&quot;</span>,<span class="st">&quot;IS&quot;</span>,<span class="st">&quot;LI&quot;</span>,<span class="st">&quot;AR&quot;</span>,<span class="st">&quot;AU&quot;</span>,<span class="st">&quot;BR&quot;</span>,<span class="st">&quot;CA&quot;</span>,<span class="st">&quot;CN&quot;</span>,<span class="st">&quot;GB&quot;</span>,<span class="st">&quot;ID&quot;</span>,<span class="st">&quot;IN&quot;</span>,<span class="st">&quot;JP&quot;</span>,<span class="st">&quot;KR&quot;</span>,<span class="st">&quot;MX&quot;</span>,<span class="st">&quot;RU&quot;</span>,<span class="st">&quot;SA&quot;</span>,<span class="st">&quot;TR&quot;</span>,<span class="st">&quot;US&quot;</span>,<span class="st">&quot;ZA&quot;</span>),</span>
+<span id="cb19-3"><a href="analisis-univariado.html#cb19-3" tabindex="-1"></a>  <span class="at">NombrePais =</span> <span class="fu">c</span>(<span class="st">&quot;World&quot;</span>,<span class="st">&quot;Rest of the World&quot;</span>,<span class="st">&quot;Domestic (home or reference area)&quot;</span>,<span class="st">&quot;Extra EEA&quot;</span>,<span class="st">&quot;Sweden&quot;</span>,<span class="st">&quot;Denmark&quot;</span>,<span class="st">&quot;Bulgaria&quot;</span>,<span class="st">&quot;Greece&quot;</span>,<span class="st">&quot;Austria&quot;</span>,<span class="st">&quot;Belgium&quot;</span>,<span class="st">&quot;Slovenia&quot;</span>,<span class="st">&quot;Slovakia&quot;</span>,<span class="st">&quot;Cyprus&quot;</span>,<span class="st">&quot;Spain&quot;</span>,<span class="st">&quot;Finland&quot;</span>,<span class="st">&quot;France&quot;</span>,<span class="st">&quot;Italy&quot;</span>,<span class="st">&quot;Germany&quot;</span>,<span class="st">&quot;Ireland&quot;</span>,<span class="st">&quot;Estonia&quot;</span>,<span class="st">&quot;Luxembourg&quot;</span>,<span class="st">&quot;Malta&quot;</span>,<span class="st">&quot;Latvia&quot;</span>,<span class="st">&quot;Croatia&quot;</span>,<span class="st">&quot;Lithuania&quot;</span>,<span class="st">&quot;Portugal&quot;</span>,<span class="st">&quot;Czech Republic&quot;</span>,<span class="st">&quot;Poland&quot;</span>,<span class="st">&quot;Hungary&quot;</span>,<span class="st">&quot;Romania&quot;</span>,<span class="st">&quot;Netherlands&quot;</span>,<span class="st">&quot;Other EEA countries (all countries excluding the reference area)&quot;</span>,<span class="st">&quot;Norway&quot;</span>,<span class="st">&quot;Iceland&quot;</span>,<span class="st">&quot;Liechtenstein&quot;</span>,<span class="st">&quot;Argentina&quot;</span>,<span class="st">&quot;Australia&quot;</span>,<span class="st">&quot;Brazil&quot;</span>,<span class="st">&quot;Canada&quot;</span>,<span class="st">&quot;China&quot;</span>,<span class="st">&quot;United Kingdom&quot;</span>,<span class="st">&quot;Indonesia&quot;</span>,<span class="st">&quot;India&quot;</span>,<span class="st">&quot;Japan&quot;</span>,<span class="st">&quot;Korea, Republic of&quot;</span>,<span class="st">&quot;Mexico&quot;</span>,<span class="st">&quot;Russian Federation&quot;</span>,<span class="st">&quot;Saudi Arabia&quot;</span>,<span class="st">&quot;Turkey&quot;</span>,<span class="st">&quot;United States&quot;</span>,<span class="st">&quot;South Africa&quot;</span>)</span>
+<span id="cb19-4"><a href="analisis-univariado.html#cb19-4" tabindex="-1"></a>)</span>
+<span id="cb19-5"><a href="analisis-univariado.html#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="analisis-univariado.html#cb19-6" tabindex="-1"></a>tabla_country_dest <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb19-7"><a href="analisis-univariado.html#cb19-7" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>COUNTRY_DESTINATION, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="analisis-univariado.html#cb19-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-9"><a href="analisis-univariado.html#cb19-9" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frecuencia)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-10"><a href="analisis-univariado.html#cb19-10" tabindex="-1"></a> </span>
+<span id="cb19-11"><a href="analisis-univariado.html#cb19-11" tabindex="-1"></a>  <span class="fu">left_join</span>(lookup_org, <span class="at">by =</span> <span class="st">&quot;Categoria&quot;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb19-12"><a href="analisis-univariado.html#cb19-12" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Categoria =</span> <span class="fu">factor</span>(Categoria, <span class="at">levels =</span> Categoria)) </span>
+<span id="cb19-13"><a href="analisis-univariado.html#cb19-13" tabindex="-1"></a>  </span>
+<span id="cb19-14"><a href="analisis-univariado.html#cb19-14" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="analisis-univariado.html#cb19-15" tabindex="-1"></a><span class="fu">kable</span>(tabla_country_dest) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-16"><a href="analisis-univariado.html#cb19-16" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;400px&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
+<table>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Categoria
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Frecuencia
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Porcentaje
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+NombrePais
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+W0
+</td>
+<td style="text-align:right;">
+88733
+</td>
+<td style="text-align:right;">
+13.39
+</td>
+<td style="text-align:left;">
+World
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+W1
+</td>
+<td style="text-align:right;">
+21755
+</td>
+<td style="text-align:right;">
+3.28
+</td>
+<td style="text-align:left;">
+Rest of the World
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+W2
+</td>
+<td style="text-align:right;">
+21507
+</td>
+<td style="text-align:right;">
+3.25
+</td>
+<td style="text-align:left;">
+Domestic (home or reference area)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G1
+</td>
+<td style="text-align:right;">
+17392
+</td>
+<td style="text-align:right;">
+2.62
+</td>
+<td style="text-align:left;">
+Extra EEA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SE
+</td>
+<td style="text-align:right;">
+16057
+</td>
+<td style="text-align:right;">
+2.42
+</td>
+<td style="text-align:left;">
+Sweden
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DK
+</td>
+<td style="text-align:right;">
+15769
+</td>
+<td style="text-align:right;">
+2.38
+</td>
+<td style="text-align:left;">
+Denmark
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BG
+</td>
+<td style="text-align:right;">
+15488
+</td>
+<td style="text-align:right;">
+2.34
+</td>
+<td style="text-align:left;">
+Bulgaria
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GR
+</td>
+<td style="text-align:right;">
+15440
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Greece
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AT
+</td>
+<td style="text-align:right;">
+15437
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Austria
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BE
+</td>
+<td style="text-align:right;">
+15437
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Belgium
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SI
+</td>
+<td style="text-align:right;">
+15437
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Slovenia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SK
+</td>
+<td style="text-align:right;">
+15437
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Slovakia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CY
+</td>
+<td style="text-align:right;">
+15436
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Cyprus
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ES
+</td>
+<td style="text-align:right;">
+15436
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Spain
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FI
+</td>
+<td style="text-align:right;">
+15436
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Finland
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+FR
+</td>
+<td style="text-align:right;">
+15436
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+France
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IT
+</td>
+<td style="text-align:right;">
+15436
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Italy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DE
+</td>
+<td style="text-align:right;">
+15435
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Germany
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IE
+</td>
+<td style="text-align:right;">
+15435
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Ireland
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+EE
+</td>
+<td style="text-align:right;">
+15434
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Estonia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LU
+</td>
+<td style="text-align:right;">
+15434
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Luxembourg
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MT
+</td>
+<td style="text-align:right;">
+15433
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Malta
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LV
+</td>
+<td style="text-align:right;">
+15432
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Latvia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HR
+</td>
+<td style="text-align:right;">
+15429
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Croatia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LT
+</td>
+<td style="text-align:right;">
+15417
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Lithuania
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PT
+</td>
+<td style="text-align:right;">
+15417
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Portugal
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CZ
+</td>
+<td style="text-align:right;">
+15413
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+<td style="text-align:left;">
+Czech Republic
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PL
+</td>
+<td style="text-align:right;">
+15401
+</td>
+<td style="text-align:right;">
+2.32
+</td>
+<td style="text-align:left;">
+Poland
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HU
+</td>
+<td style="text-align:right;">
+15386
+</td>
+<td style="text-align:right;">
+2.32
+</td>
+<td style="text-align:left;">
+Hungary
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RO
+</td>
+<td style="text-align:right;">
+15385
+</td>
+<td style="text-align:right;">
+2.32
+</td>
+<td style="text-align:left;">
+Romania
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NL
+</td>
+<td style="text-align:right;">
+15369
+</td>
+<td style="text-align:right;">
+2.32
+</td>
+<td style="text-align:left;">
+Netherlands
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+G3
+</td>
+<td style="text-align:right;">
+13173
+</td>
+<td style="text-align:right;">
+1.99
+</td>
+<td style="text-align:left;">
+Other EEA countries (all countries excluding the reference area)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NO
+</td>
+<td style="text-align:right;">
+11735
+</td>
+<td style="text-align:right;">
+1.77
+</td>
+<td style="text-align:left;">
+Norway
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IS
+</td>
+<td style="text-align:right;">
+11732
+</td>
+<td style="text-align:right;">
+1.77
+</td>
+<td style="text-align:left;">
+Iceland
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LI
+</td>
+<td style="text-align:right;">
+11727
+</td>
+<td style="text-align:right;">
+1.77
+</td>
+<td style="text-align:left;">
+Liechtenstein
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AR
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Argentina
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AU
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Australia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BR
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Brazil
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CA
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Canada
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CN
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+China
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GB
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+United Kingdom
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ID
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Indonesia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+IN
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+India
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+JP
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Japan
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+KR
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Korea, Republic of
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MX
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Mexico
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+RU
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Russian Federation
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SA
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Saudi Arabia
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TR
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+Turkey
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+US
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+United States
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ZA
+</td>
+<td style="text-align:right;">
+2960
+</td>
+<td style="text-align:right;">
+0.45
+</td>
+<td style="text-align:left;">
+South Africa
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="gráfico-3" class="section level4 unnumbered hasAnchor">
+<h4>Gráfico<a href="analisis-univariado.html#gr%C3%A1fico-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="analisis-univariado.html#cb20-1" tabindex="-1"></a><span class="co"># Gráfico</span></span>
+<span id="cb20-2"><a href="analisis-univariado.html#cb20-2" tabindex="-1"></a>tabla_country_dest <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="analisis-univariado.html#cb20-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Frecuencia, <span class="at">y =</span> Categoria)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="analisis-univariado.html#cb20-4" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="analisis-univariado.html#cb20-5" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)), <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1</span>, <span class="at">size =</span> <span class="fl">1.8</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="analisis-univariado.html#cb20-6" tabindex="-1"></a> </span>
+<span id="cb20-7"><a href="analisis-univariado.html#cb20-7" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="analisis-univariado.html#cb20-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Núm. de transacciones&quot;</span>, <span class="at">y =</span> <span class="st">&quot;COUNTRY_DESTINATION&quot;</span>) <span class="sc">+</span></span>
+<span id="cb20-9"><a href="analisis-univariado.html#cb20-9" tabindex="-1"></a> </span>
+<span id="cb20-10"><a href="analisis-univariado.html#cb20-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb20-11"><a href="analisis-univariado.html#cb20-11" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb20-12"><a href="analisis-univariado.html#cb20-12" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-13"><a href="analisis-univariado.html#cb20-13" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb20-14"><a href="analisis-univariado.html#cb20-14" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb20-15"><a href="analisis-univariado.html#cb20-15" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-16"><a href="analisis-univariado.html#cb20-16" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>)  </span>
+<span id="cb20-17"><a href="analisis-univariado.html#cb20-17" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" /></p>
+<p>La tabla y gráfico anteriores describen la distribución de la variable <strong>COUNTRY_DESTINATION</strong> del dataset, que permite caracterizar el destino de las transacciones. Empezamos destacando que el 22.54% de las transacciones no especifican el destino final si no que generalizan en entidades como World, Rest of the World, Domestic y Extra EEA cada una con una representación del 13%, 3.28%, 3.25% y 2.62%. Para los paises europeos explicitamente listados se manejan porcentajes de representación del 2% cada uno aproximadamente. Mientras que, los paises destino fuera de la EEA comprenden menos del 1% cada uno.</p>
+<blockquote>
+<p><strong>World:</strong> Hace referencia a todo el conjunto de pais e instituciones existentes, incluyendo al país de referencia.</p>
+<p><strong>Rest of the world</strong>: Hace referencia a todo el conjunto de pais e instituciones existentes, excluyendo al país de origen.</p>
+<p><strong>Domestic:</strong> Hace referencia a las entidades dentro del territorio economico de un país</p>
+<p><strong>Extra EEA:</strong> Hace referencia a los demás paises y entidades del Espacio Económico Europeo, incluyendo Noruega, Islandia y Liechtenstein.</p>
+<p><strong>Other EEA countries (all countries excluding the reference area):</strong> Hace referencia a los demás paises y entidades del Espacio Económico Europeo excluyendo al país de origen</p>
 </blockquote>
 
 </div>
