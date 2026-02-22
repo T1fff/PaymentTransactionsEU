@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-02-21" />
+<meta name="date" content="2026-02-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,10 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -149,7 +153,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#diccionario-de-columnas"><i class="fa fa-check"></i>Diccionario de columnas</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#columnas-a-utilizar"><i class="fa fa-check"></i>Columnas a utilizar</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataframe-resultante"><i class="fa fa-check"></i>Dataframe resultante</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#identificaci%C3%B3n-de-valores-faltantes"><i class="fa fa-check"></i>Identificación de valores faltantes</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="analisis-univariado.html"><a href="analisis-univariado.html"><i class="fa fa-check"></i><b>2</b> Analisis Univariado</a>
 <ul>
@@ -206,8 +212,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.2</span> Captioned figures and tables<a href="analisis-bivariado.html#captioned-figures-and-tables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Figures and tables <em>with captions</em> can also be cross-referenced from elsewhere in your book using <code>\@ref(fig:chunk-label)</code> and <code>\@ref(tab:chunk-label)</code>, respectively.</p>
 <p>See Figure <a href="analisis-bivariado.html#fig:nice-fig">3.1</a>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="analisis-bivariado.html#cb7-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
-<span id="cb7-2"><a href="analisis-bivariado.html#cb7-2" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="analisis-bivariado.html#cb13-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, .<span class="dv">1</span>, .<span class="dv">1</span>))</span>
+<span id="cb13-2"><a href="analisis-bivariado.html#cb13-2" tabindex="-1"></a><span class="fu">plot</span>(pressure, <span class="at">type =</span> <span class="st">&#39;b&#39;</span>, <span class="at">pch =</span> <span class="dv">19</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:nice-fig"></span>
 <img src="eda_payments_files/figure-html/nice-fig-1.png" alt="Plot with connected points showing that vapor pressure of mercury increases exponentially as temperature increases." width="80%" />
 <p class="caption">
@@ -215,10 +221,10 @@ Figure 3.1: Here is a nice figure!
 </p>
 </div>
 <p>Don’t miss Table <a href="analisis-bivariado.html#tab:nice-tab">3.1</a>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="analisis-bivariado.html#cb8-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb8-2"><a href="analisis-bivariado.html#cb8-2" tabindex="-1"></a>  <span class="fu">head</span>(pressure, <span class="dv">10</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
-<span id="cb8-3"><a href="analisis-bivariado.html#cb8-3" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
-<span id="cb8-4"><a href="analisis-bivariado.html#cb8-4" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="analisis-bivariado.html#cb14-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb14-2"><a href="analisis-bivariado.html#cb14-2" tabindex="-1"></a>  <span class="fu">head</span>(pressure, <span class="dv">10</span>), <span class="at">caption =</span> <span class="st">&#39;Here is a nice table!&#39;</span>,</span>
+<span id="cb14-3"><a href="analisis-bivariado.html#cb14-3" tabindex="-1"></a>  <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-4"><a href="analisis-bivariado.html#cb14-4" tabindex="-1"></a>)</span></code></pre></div>
 <table>
 <caption><span id="tab:nice-tab">Table 3.1: </span>Here is a nice table!</caption>
 <thead>
