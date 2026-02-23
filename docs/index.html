@@ -160,14 +160,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="analisis-univariado.html"><a href="analisis-univariado.html"><i class="fa fa-check"></i><b>2</b> Analisis Univariado</a>
 <ul>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#target-variable-type_fraud"><i class="fa fa-check"></i>Target Variable: TYPE_FRAUD</a></li>
-<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#variables-caracter%C3%ADsticas"><i class="fa fa-check"></i>Variables Características</a></li>
-<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#categ%C3%B3ricas"><i class="fa fa-check"></i>Categóricas</a>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#variables-caracter%C3%ADsticas-categ%C3%B3ricas"><i class="fa fa-check"></i>Variables Características Categóricas</a>
 <ul>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#id"><i class="fa fa-check"></i>ID</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#freq"><i class="fa fa-check"></i>FREQ</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_origin"><i class="fa fa-check"></i>COUNTRY_ORIGIN</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#country_destination"><i class="fa fa-check"></i>COUNTRY_DESTINATION</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#type_trx"><i class="fa fa-check"></i>TYPE_TRX</a></li>
 <li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#type_psp"><i class="fa fa-check"></i>TYPE_PSP</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#unit"><i class="fa fa-check"></i>UNIT</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#year"><i class="fa fa-check"></i>YEAR</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#type_amount"><i class="fa fa-check"></i>TYPE_AMOUNT</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#decimals"><i class="fa fa-check"></i>DECIMALS</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#description"><i class="fa fa-check"></i>DESCRIPTION</a></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#unit_mult"><i class="fa fa-check"></i>UNIT_MULT</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#variables-caracter%C3%ADsticas-num%C3%A9ricas"><i class="fa fa-check"></i>Variables Características Numéricas</a>
+<ul>
+<li class="chapter" data-level="" data-path="analisis-univariado.html"><a href="analisis-univariado.html#amount"><i class="fa fa-check"></i>AMOUNT</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="analisis-bivariado.html"><a href="analisis-bivariado.html"><i class="fa fa-check"></i><b>3</b> Analisis Bivariado</a>
@@ -260,7 +270,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="diccionario-de-columnas" class="section level3 unnumbered hasAnchor">
 <h3>Diccionario de columnas<a href="index.html#diccionario-de-columnas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><strong>1. KEY:</strong> Identificador de transacción.</p>
+<p><strong>1. KEY:</strong> Clave compuesta de transacción</p>
 <p><strong>2. FREQ:</strong> Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.).</p>
 <p><strong>3. REF_AREA:</strong> País origen de la transacción.</p>
 <p><strong>4. COUNT_AREA:</strong> Institución origen de la transacción.</p>
@@ -293,7 +303,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="columnas-a-utilizar" class="section level3 unnumbered hasAnchor">
 <h3>Columnas a utilizar<a href="index.html#columnas-a-utilizar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Si se analiza detenidamente, se encuentran varias columnas con información duplicada. Del mismo modo, hay columnas cuya información no se encuentra adecuadamente documentada dificultando así la clasificación de su impacto en el conjunto de datos. Por tanto, solo se tendrán en cuenta las columnas listadas a continuación:</p>
-<p><strong>1. KEY &gt;&gt; ID:</strong> Identificador de transacción.</p>
+<p><strong>1. KEY &gt;&gt; ID:</strong> Clave compuesta de transacción.</p>
 <p><strong>2. FREQ:</strong> Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.)</p>
 <p><strong>3. REF_AREA &gt;&gt; COUNTRY_ORIGIN:</strong> País origen de la transacción.</p>
 <p><strong>4. COUNT_AREA &gt;&gt; COUNTRY_DESTINATION:</strong> Institución origen de la transacción.</p>

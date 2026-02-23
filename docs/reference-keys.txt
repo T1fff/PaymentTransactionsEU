@@ -1,8 +1,8 @@
+fig:nice-fig
+tab:nice-tab
 contexto-inicial
 analisis-univariado
 analisis-bivariado
 chapters-and-sub-chapters
 captioned-figures-and-tables
 parts
-fig:nice-fig
-tab:nice-tab
