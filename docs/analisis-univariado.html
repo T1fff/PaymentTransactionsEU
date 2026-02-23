@@ -3153,17 +3153,22 @@ Esta variable corresponde a un mensaje corto asociado a cada una de las transacc
 </div>
 <div id="unit_mult" class="section level3 unnumbered hasAnchor">
 <h3>UNIT_MULT<a href="analisis-univariado.html#unit_mult" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Indica la cantidad de decimales presentes en el monto.</p>
+<p>Indica el multiplicador del monto de la transacción.</p>
 <div id="tabla-11" class="section level4 unnumbered hasAnchor">
 <h4>Tabla<a href="analisis-univariado.html#tabla-11" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="analisis-univariado.html#cb36-1" tabindex="-1"></a>tabla_mulp_amount <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb36-2"><a href="analisis-univariado.html#cb36-2" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>UNIT_MULT, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb36-3"><a href="analisis-univariado.html#cb36-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-4"><a href="analisis-univariado.html#cb36-4" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frecuencia)) </span>
-<span id="cb36-5"><a href="analisis-univariado.html#cb36-5" tabindex="-1"></a>  </span>
-<span id="cb36-6"><a href="analisis-univariado.html#cb36-6" tabindex="-1"></a></span>
-<span id="cb36-7"><a href="analisis-univariado.html#cb36-7" tabindex="-1"></a><span class="fu">kable</span>(tabla_mulp_amount) <span class="sc">%&gt;%</span> </span>
-<span id="cb36-8"><a href="analisis-univariado.html#cb36-8" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;400px&quot;</span>)</span></code></pre></div>
+<span id="cb36-2"><a href="analisis-univariado.html#cb36-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">UNIT_MULT =</span> <span class="fu">case_when</span>(</span>
+<span id="cb36-3"><a href="analisis-univariado.html#cb36-3" tabindex="-1"></a>    <span class="fu">is.na</span>(UNIT_MULT) <span class="sc">~</span> <span class="fu">as.integer</span>(<span class="cn">NA</span>),  </span>
+<span id="cb36-4"><a href="analisis-univariado.html#cb36-4" tabindex="-1"></a>    UNIT_MULT <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="dv">1</span><span class="dt">L</span>,                </span>
+<span id="cb36-5"><a href="analisis-univariado.html#cb36-5" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="fu">as.integer</span>(UNIT_MULT)</span>
+<span id="cb36-6"><a href="analisis-univariado.html#cb36-6" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb36-7"><a href="analisis-univariado.html#cb36-7" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">Categoria=</span>UNIT_MULT, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-8"><a href="analisis-univariado.html#cb36-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-9"><a href="analisis-univariado.html#cb36-9" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Frecuencia)) </span>
+<span id="cb36-10"><a href="analisis-univariado.html#cb36-10" tabindex="-1"></a>  </span>
+<span id="cb36-11"><a href="analisis-univariado.html#cb36-11" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="analisis-univariado.html#cb36-12" tabindex="-1"></a><span class="fu">kable</span>(tabla_mulp_amount) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-13"><a href="analisis-univariado.html#cb36-13" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;400px&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
 <table>
 <thead>
@@ -3193,7 +3198,7 @@ Porcentaje
 </tr>
 <tr>
 <td style="text-align:right;">
-0
+1
 </td>
 <td style="text-align:right;">
 61598
@@ -3225,7 +3230,7 @@ Porcentaje
 <span id="cb37-15"><a href="analisis-univariado.html#cb37-15" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb37-16"><a href="analisis-univariado.html#cb37-16" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)  </span>
 <span id="cb37-17"><a href="analisis-univariado.html#cb37-17" tabindex="-1"></a>  )</span></code></pre></div>
-<p><img src="eda_payments_files/figure-html/unnamed-chunk-33-1.png" alt="" width="672" /></p>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-34-1.png" alt="" width="672" /></p>
 <p>La tabla y gráfico anteriores describen la distribución de la variable <strong>UNIT_MULT</strong> del dataset, que permite caracterizar el multiplicador aplicado a la columna AMOUNT. Vemos que el 90.72% de los montos representado por un multiplicador de 6, es decir, millones, frente al casi 10% agrupado por 0, asociado a unidades.</p>
 </div>
 </div>
@@ -3234,7 +3239,541 @@ Porcentaje
 <h2>Variables Características Numéricas<a href="analisis-univariado.html#variables-caracter%C3%ADsticas-num%C3%A9ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="amount" class="section level3 unnumbered hasAnchor">
 <h3>AMOUNT<a href="analisis-univariado.html#amount" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="tabla-12" class="section level4 unnumbered hasAnchor">
+<h4>Tabla<a href="analisis-univariado.html#tabla-12" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="analisis-univariado.html#cb38-1" tabindex="-1"></a>tabla_monto <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="analisis-univariado.html#cb38-2" tabindex="-1"></a>  <span class="fu">select</span>(COUNTRY_ORIGIN, AMOUNT, UNIT_MULT, DECIMALS, TYPE_AMOUNT, UNIT) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="analisis-univariado.html#cb38-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">monto_real=</span>AMOUNT<span class="sc">*</span><span class="dv">10</span><span class="sc">^</span>(UNIT_MULT<span class="sc">-</span>DECIMALS))</span>
+<span id="cb38-4"><a href="analisis-univariado.html#cb38-4" tabindex="-1"></a>  </span>
+<span id="cb38-5"><a href="analisis-univariado.html#cb38-5" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="analisis-univariado.html#cb38-6" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tabla_monto, <span class="dv">15</span>))</span></code></pre></div>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="16%" />
+<col width="13%" />
+<col width="12%" />
+<col width="16%" />
+<col width="6%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY_ORIGIN</th>
+<th align="right">AMOUNT</th>
+<th align="right">UNIT_MULT</th>
+<th align="right">DECIMALS</th>
+<th align="left">TYPE_AMOUNT</th>
+<th align="left">UNIT</th>
+<th align="right">monto_real</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.242000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">242.000</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">0.268000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">268.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.689000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">689.000</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">0.632000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">632.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.615000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">615.000</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">1.467000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">1467.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">1.311000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">1311.000</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">0.863000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">863.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">1.568711</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">1568.711</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">1.754513</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">1754.513</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.987938</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">987.938</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">5008.499000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">5008499.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">6501.324000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6501324.000</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">6017.686000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6017686.000</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">6412.088000</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6412088.000</td>
+</tr>
+</tbody>
+</table>
+<p>Como se ilustró anteriormente, los distintos tipos de unidad hacen que sea necesario dividir el análisis de esta variable en 3 categorías principales: PN, EUR y XDF</p>
+<div id="pn" class="section level5 unnumbered hasAnchor">
+<h5>PN<a href="analisis-univariado.html#pn" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="analisis-univariado.html#cb39-1" tabindex="-1"></a>tabla_monto_normal <span class="ot">&lt;-</span> tabla_monto <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="analisis-univariado.html#cb39-2" tabindex="-1"></a>  <span class="fu">filter</span>(UNIT <span class="sc">==</span> <span class="st">&quot;PN&quot;</span>)</span>
+<span id="cb39-3"><a href="analisis-univariado.html#cb39-3" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="analisis-univariado.html#cb39-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tabla_monto_normal))</span></code></pre></div>
+<table>
+<colgroup>
+<col width="21%" />
+<col width="10%" />
+<col width="14%" />
+<col width="13%" />
+<col width="17%" />
+<col width="7%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY_ORIGIN</th>
+<th align="right">AMOUNT</th>
+<th align="right">UNIT_MULT</th>
+<th align="right">DECIMALS</th>
+<th align="left">TYPE_AMOUNT</th>
+<th align="left">UNIT</th>
+<th align="right">monto_real</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.242</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">242</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">0.268</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">268</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.689</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">689</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">0.632</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">632</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">0.615</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">615</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">1.467</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">PN</td>
+<td align="right">1467</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="analisis-univariado.html#cb40-1" tabindex="-1"></a>tabla_monto_normal <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="analisis-univariado.html#cb40-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb40-3"><a href="analisis-univariado.html#cb40-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb40-4"><a href="analisis-univariado.html#cb40-4" tabindex="-1"></a>    <span class="at">n_missing =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(monto_real)),</span>
+<span id="cb40-5"><a href="analisis-univariado.html#cb40-5" tabindex="-1"></a>    <span class="at">pct_missing =</span> <span class="fu">round</span>(n_missing <span class="sc">/</span> n <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb40-6"><a href="analisis-univariado.html#cb40-6" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-7"><a href="analisis-univariado.html#cb40-7" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-8"><a href="analisis-univariado.html#cb40-8" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-9"><a href="analisis-univariado.html#cb40-9" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-10"><a href="analisis-univariado.html#cb40-10" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-11"><a href="analisis-univariado.html#cb40-11" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-12"><a href="analisis-univariado.html#cb40-12" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb40-13"><a href="analisis-univariado.html#cb40-13" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb40-14"><a href="analisis-univariado.html#cb40-14" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>##        n n_missing pct_missing    media      ds mediana minimo    maximo Q1
+## 1 296348     66013       22.28 184743.7 2786927  20.566    -10 207701558  0
+##     Q3  IQR
+## 1 1248 1248</code></pre>
+<p>La variable AMOUNT filtrada por PN fue analizada a partir de 296.348 observaciones. El total de datos faltantes corresponde a 66.013 observaciones, aproximadamente un 22% del total. Se obtuvo un promedio de 184.654 pn con una desviación estándar de 2.786.927, donde el 50% de los totales está por debajo de 20. El valor minimo fue aproximadamente de -10 y el máximo fue de 207.701.558 pn. El 25% de los datos son inferiores a 0 y el 75% menores a 1248. Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="analisis-univariado.html#cb42-1" tabindex="-1"></a>tabla_monto_normal <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="analisis-univariado.html#cb42-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> monto_real)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="analisis-univariado.html#cb42-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="analisis-univariado.html#cb42-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb42-5"><a href="analisis-univariado.html#cb42-5" tabindex="-1"></a>    <span class="at">fun =</span> mean,</span>
+<span id="cb42-6"><a href="analisis-univariado.html#cb42-6" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb42-7"><a href="analisis-univariado.html#cb42-7" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">20</span>,</span>
+<span id="cb42-8"><a href="analisis-univariado.html#cb42-8" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb42-9"><a href="analisis-univariado.html#cb42-9" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb42-10"><a href="analisis-univariado.html#cb42-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb42-11"><a href="analisis-univariado.html#cb42-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb42-12"><a href="analisis-univariado.html#cb42-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Diagrama de cajas y bigotes&quot;</span>,</span>
+<span id="cb42-13"><a href="analisis-univariado.html#cb42-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb42-14"><a href="analisis-univariado.html#cb42-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Núm. de trasacciones&quot;</span></span>
+<span id="cb42-15"><a href="analisis-univariado.html#cb42-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb42-16"><a href="analisis-univariado.html#cb42-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-38-1.png" alt="" width="672" />
+La distibución de AMOUNT para el tipo PN es altamente asimetrica, con fuerte concentración de valores bajos y una cantidad significativa de valores extremos altos. Esto indica que aunque la mayoría de las transacciones tienen totales moderados, existen algunas con totales excepcionalmente altos que influyen notablemente en los estadísticos como la media y la desviación estándar.</p>
+</div>
+<div id="eur" class="section level5 unnumbered hasAnchor">
+<h5>EUR<a href="analisis-univariado.html#eur" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="analisis-univariado.html#cb43-1" tabindex="-1"></a>tabla_monto_eur <span class="ot">&lt;-</span> tabla_monto <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="analisis-univariado.html#cb43-2" tabindex="-1"></a>  <span class="fu">filter</span>(UNIT <span class="sc">==</span> <span class="st">&quot;EUR&quot;</span>)</span>
+<span id="cb43-3"><a href="analisis-univariado.html#cb43-3" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="analisis-univariado.html#cb43-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tabla_monto_eur))</span></code></pre></div>
+<table>
+<colgroup>
+<col width="21%" />
+<col width="12%" />
+<col width="14%" />
+<col width="12%" />
+<col width="16%" />
+<col width="7%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY_ORIGIN</th>
+<th align="right">AMOUNT</th>
+<th align="right">UNIT_MULT</th>
+<th align="right">DECIMALS</th>
+<th align="left">TYPE_AMOUNT</th>
+<th align="left">UNIT</th>
+<th align="right">monto_real</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">5008.499</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">5008499</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">6501.324</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6501324</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">6017.686</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6017686</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">6412.088</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6412088</td>
+</tr>
+<tr class="odd">
+<td align="left">AT</td>
+<td align="right">6749.347</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">6749347</td>
+</tr>
+<tr class="even">
+<td align="left">AT</td>
+<td align="right">7398.575</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">EUR</td>
+<td align="right">7398575</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="analisis-univariado.html#cb44-1" tabindex="-1"></a>tabla_monto_eur <span class="sc">%&gt;%</span></span>
+<span id="cb44-2"><a href="analisis-univariado.html#cb44-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb44-3"><a href="analisis-univariado.html#cb44-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb44-4"><a href="analisis-univariado.html#cb44-4" tabindex="-1"></a>    <span class="at">n_missing =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(monto_real)),</span>
+<span id="cb44-5"><a href="analisis-univariado.html#cb44-5" tabindex="-1"></a>    <span class="at">pct_missing =</span> <span class="fu">round</span>(n_missing <span class="sc">/</span> n <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb44-6"><a href="analisis-univariado.html#cb44-6" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-7"><a href="analisis-univariado.html#cb44-7" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-8"><a href="analisis-univariado.html#cb44-8" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-9"><a href="analisis-univariado.html#cb44-9" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-10"><a href="analisis-univariado.html#cb44-10" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-11"><a href="analisis-univariado.html#cb44-11" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-12"><a href="analisis-univariado.html#cb44-12" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-13"><a href="analisis-univariado.html#cb44-13" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-14"><a href="analisis-univariado.html#cb44-14" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>##        n n_missing pct_missing     media         ds  mediana minimo
+## 1 258391     55972       21.66 353443535 5407405070 27290.83    -10
+##         maximo       Q1      Q3     IQR
+## 1 263423125212 3.685505 1656369 1656365</code></pre>
+<p>La variable AMOUNT filtrada por EUR fue analizada a partir de 258.391 observaciones. El total de datos faltantes corresponde a 55.972 observaciones, aproximadamente un 22% del total. Se obtuvo un promedio de 353.443.535 euros con una desviación estándar de 5.407.405.070, donde el 50% de los montos está por debajo de 27.290.83 euros. El valor minimo fue aproximadamente de -10 y el máximo fue de 263.423.125.212 euros El 25% de los datos son inferiores a 3.68 euros y el 75% menores a 1.656.369 Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="analisis-univariado.html#cb46-1" tabindex="-1"></a>tabla_monto_eur <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="analisis-univariado.html#cb46-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> monto_real)) <span class="sc">+</span></span>
+<span id="cb46-3"><a href="analisis-univariado.html#cb46-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb46-4"><a href="analisis-univariado.html#cb46-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb46-5"><a href="analisis-univariado.html#cb46-5" tabindex="-1"></a>    <span class="at">fun =</span> mean,</span>
+<span id="cb46-6"><a href="analisis-univariado.html#cb46-6" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb46-7"><a href="analisis-univariado.html#cb46-7" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">20</span>,</span>
+<span id="cb46-8"><a href="analisis-univariado.html#cb46-8" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb46-9"><a href="analisis-univariado.html#cb46-9" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb46-10"><a href="analisis-univariado.html#cb46-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-11"><a href="analisis-univariado.html#cb46-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb46-12"><a href="analisis-univariado.html#cb46-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Diagrama de cajas y bigotes&quot;</span>,</span>
+<span id="cb46-13"><a href="analisis-univariado.html#cb46-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb46-14"><a href="analisis-univariado.html#cb46-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Núm. de trasacciones&quot;</span></span>
+<span id="cb46-15"><a href="analisis-univariado.html#cb46-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb46-16"><a href="analisis-univariado.html#cb46-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-41-1.png" alt="" width="672" /></p>
+</div>
+<div id="xdf" class="section level5 unnumbered hasAnchor">
+<h5>XDF<a href="analisis-univariado.html#xdf" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="analisis-univariado.html#cb47-1" tabindex="-1"></a>tabla_monto_xdf <span class="ot">&lt;-</span> tabla_monto <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="analisis-univariado.html#cb47-2" tabindex="-1"></a>  <span class="fu">filter</span>(UNIT <span class="sc">==</span> <span class="st">&quot;XDF&quot;</span>)</span>
+<span id="cb47-3"><a href="analisis-univariado.html#cb47-3" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="analisis-univariado.html#cb47-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(tabla_monto_xdf))</span></code></pre></div>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="16%" />
+<col width="13%" />
+<col width="12%" />
+<col width="16%" />
+<col width="6%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">COUNTRY_ORIGIN</th>
+<th align="right">AMOUNT</th>
+<th align="right">UNIT_MULT</th>
+<th align="right">DECIMALS</th>
+<th align="left">TYPE_AMOUNT</th>
+<th align="left">UNIT</th>
+<th align="right">monto_real</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">BG</td>
+<td align="right">NA</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">Q</td>
+<td align="left">XDF</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">BG</td>
+<td align="right">72.04537</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">XDF</td>
+<td align="right">72045.37</td>
+</tr>
+<tr class="odd">
+<td align="left">BG</td>
+<td align="right">2880.03109</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">XDF</td>
+<td align="right">2880031.09</td>
+</tr>
+<tr class="even">
+<td align="left">BG</td>
+<td align="right">966.63345</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">XDF</td>
+<td align="right">966633.45</td>
+</tr>
+<tr class="odd">
+<td align="left">BG</td>
+<td align="right">987.89895</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">XDF</td>
+<td align="right">987898.95</td>
+</tr>
+<tr class="even">
+<td align="left">CZ</td>
+<td align="right">26214.40400</td>
+<td align="right">6</td>
+<td align="right">3</td>
+<td align="left">A</td>
+<td align="left">XDF</td>
+<td align="right">26214404.00</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="analisis-univariado.html#cb48-1" tabindex="-1"></a>tabla_monto_xdf <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="analisis-univariado.html#cb48-2" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb48-3"><a href="analisis-univariado.html#cb48-3" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb48-4"><a href="analisis-univariado.html#cb48-4" tabindex="-1"></a>    <span class="at">n_missing =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(monto_real)),</span>
+<span id="cb48-5"><a href="analisis-univariado.html#cb48-5" tabindex="-1"></a>    <span class="at">pct_missing =</span> <span class="fu">round</span>(n_missing <span class="sc">/</span> n <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb48-6"><a href="analisis-univariado.html#cb48-6" tabindex="-1"></a>    <span class="at">media =</span> <span class="fu">mean</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-7"><a href="analisis-univariado.html#cb48-7" tabindex="-1"></a>    <span class="at">ds =</span> <span class="fu">sd</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-8"><a href="analisis-univariado.html#cb48-8" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-9"><a href="analisis-univariado.html#cb48-9" tabindex="-1"></a>    <span class="at">minimo =</span> <span class="fu">min</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-10"><a href="analisis-univariado.html#cb48-10" tabindex="-1"></a>    <span class="at">maximo =</span> <span class="fu">max</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-11"><a href="analisis-univariado.html#cb48-11" tabindex="-1"></a>    <span class="at">Q1 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-12"><a href="analisis-univariado.html#cb48-12" tabindex="-1"></a>    <span class="at">Q3 =</span> <span class="fu">quantile</span>(monto_real, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-13"><a href="analisis-univariado.html#cb48-13" tabindex="-1"></a>    <span class="at">IQR =</span> <span class="fu">IQR</span>(monto_real, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb48-14"><a href="analisis-univariado.html#cb48-14" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>##       n n_missing pct_missing      media          ds mediana minimo
+## 1 61103     17562       28.74 5685471097 75176776461   38552    -10
+##         maximo Q1      Q3     IQR
+## 1 2.950583e+12  0 9495258 9495258</code></pre>
+<p>La variable AMOUNT filtrada por EUR fue analizada a partir de 61.103 observaciones. El total de datos faltantes corresponde a 17.562 observaciones, aproximadamente un 29% del total. Se obtuvo un promedio de 5.685.471.097 XDF con una desviación estándar de 75.176.776.461, donde el 50% de los montos está por debajo de 38.552 XDF. El valor minimo fue aproximadamente de -10 y el máximo fue de 2.950583e+12 XDF. El 25% de los datos son inferiores a 0 XDF y el 75% menores a 9.495.258 XDF. Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="analisis-univariado.html#cb50-1" tabindex="-1"></a>tabla_monto_eur <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="analisis-univariado.html#cb50-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> monto_real)) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="analisis-univariado.html#cb50-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="analisis-univariado.html#cb50-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb50-5"><a href="analisis-univariado.html#cb50-5" tabindex="-1"></a>    <span class="at">fun =</span> mean,</span>
+<span id="cb50-6"><a href="analisis-univariado.html#cb50-6" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb50-7"><a href="analisis-univariado.html#cb50-7" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">20</span>,</span>
+<span id="cb50-8"><a href="analisis-univariado.html#cb50-8" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb50-9"><a href="analisis-univariado.html#cb50-9" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb50-10"><a href="analisis-univariado.html#cb50-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb50-11"><a href="analisis-univariado.html#cb50-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb50-12"><a href="analisis-univariado.html#cb50-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Diagrama de cajas y bigotes&quot;</span>,</span>
+<span id="cb50-13"><a href="analisis-univariado.html#cb50-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb50-14"><a href="analisis-univariado.html#cb50-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Núm. de trasacciones&quot;</span></span>
+<span id="cb50-15"><a href="analisis-univariado.html#cb50-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb50-16"><a href="analisis-univariado.html#cb50-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-44-1.png" alt="" width="672" />
+La distibución de AMOUNT para el tipo XDF es altamente asimetrica, con fuerte concentración de valores bajos y una cantidad significativa de valores extremos altos. Esto indica que aunque la mayoría de las transacciones tienen totales moderados, existen algunas con totales excepcionalmente altos que influyen notablemente en los estadísticos como la media y la desviación estándar.</p>
 
+</div>
+</div>
 </div>
 </div>
 </div>
