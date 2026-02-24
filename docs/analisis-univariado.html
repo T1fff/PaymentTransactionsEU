@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-02-22" />
+<meta name="date" content="2026-02-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -3771,7 +3771,7 @@ La distibución de AMOUNT para el tipo PN es altamente asimetrica, con fuerte co
 ##         maximo Q1      Q3     IQR
 ## 1 2.950583e+12  0 9495258 9495258</code></pre>
 <p>La variable AMOUNT filtrada por EUR fue analizada a partir de 61.103 observaciones. El total de datos faltantes corresponde a 17.562 observaciones, aproximadamente un 29% del total. Se obtuvo un promedio de 5.685.471.097 XDF con una desviación estándar de 75.176.776.461, donde el 50% de los montos está por debajo de 38.552 XDF. El valor minimo fue aproximadamente de -10 y el máximo fue de 2.950583e+12 XDF. El 25% de los datos son inferiores a 0 XDF y el 75% menores a 9.495.258 XDF. Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="analisis-univariado.html#cb50-1" tabindex="-1"></a>tabla_monto_eur <span class="sc">%&gt;%</span></span>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="analisis-univariado.html#cb50-1" tabindex="-1"></a>tabla_monto_xdf <span class="sc">%&gt;%</span></span>
 <span id="cb50-2"><a href="analisis-univariado.html#cb50-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> monto_real)) <span class="sc">+</span></span>
 <span id="cb50-3"><a href="analisis-univariado.html#cb50-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
 <span id="cb50-4"><a href="analisis-univariado.html#cb50-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
