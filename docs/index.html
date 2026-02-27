@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-02-26" />
+<meta name="date" content="2026-02-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -152,6 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#diccionario-de-columnas"><i class="fa fa-check"></i>Diccionario de columnas</a></li>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#comprobaci%C3%B3n-de-columna-repetidas"><i class="fa fa-check"></i><b>1.0.1</b> Comprobación de columna repetidas</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#columnas-a-utilizar"><i class="fa fa-check"></i>Columnas a utilizar</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataframe-resultante"><i class="fa fa-check"></i>Dataframe resultante</a></li>
 </ul></li>
@@ -226,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Análisis Exploratorio de Datos</h1>
 <p class="author"><em>Tiffany Mendoza S. y Sergio Rada</em></p>
-<p class="date"><em>2026-02-26</em></p>
+<p class="date"><em>2026-02-27</em></p>
 </div>
 <div id="contexto-inicial" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Contexto inicial<a href="index.html#contexto-inicial" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -309,7 +310,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>13. CONF_STATUS:</strong> Clasificación de confidencialidad (Libre, restringido, etc).</p>
 <p><strong>14. PRE_BREAK_VALUE:</strong> No especificada en la documentación.</p>
 <p><strong>15. COMMENT_OBS:</strong> Observaciones.</p>
-<p><strong>16. TIME_FORMAT:</strong> Columna copia de FREQ.</p>
+<p><strong>16. TIME_FORMAT:</strong> No especificada en la documentación.</p>
 <p><strong>17. BREAKS:</strong> No especificada en la documentación.</p>
 <p><strong>18. COMMENT_TS:</strong> No especificada en la documentación.</p>
 <p><strong>19. COMPILING_ORG:</strong> No especificada en la documentación.</p>
@@ -323,6 +324,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>27. TITLE_COMPL:</strong> Columna copia de TITLE.</p>
 <p><strong>28. UNIT:</strong> Columna copia de UNIT_MEASURE.</p>
 <p><strong>29. UNIT_MULT:</strong> Indica el multiplicador del monto de la transacción.</p>
+</div>
+<div id="comprobación-de-columna-repetidas" class="section level3 hasAnchor" number="1.0.1">
+<h3><span class="header-section-number">1.0.1</span> Comprobación de columna repetidas<a href="index.html#comprobaci%C3%B3n-de-columna-repetidas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="unit_measure-unit" class="section level4 hasAnchor" number="1.0.1.1">
+<h4><span class="header-section-number">1.0.1.1</span> UNIT_MEASURE == UNIT<a href="index.html#unit_measure-unit" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">identical</span>(datos<span class="sc">$</span>UNIT_MEASURE, datos<span class="sc">$</span>UNIT))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">identical</span>(datos<span class="sc">$</span>TITLE, datos<span class="sc">$</span>TITLE_COMPL))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</div>
 </div>
 <div id="columnas-a-utilizar" class="section level3 unnumbered hasAnchor">
 <h3>Columnas a utilizar<a href="index.html#columnas-a-utilizar" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -344,11 +355,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="dataframe-resultante" class="section level3 unnumbered hasAnchor">
 <h3>Dataframe resultante<a href="index.html#dataframe-resultante" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="index.html#cb9-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">clave=</span>KEY, <span class="at">frecuencia=</span>FREQ, <span class="at">pais_origen=</span>REF_AREA, <span class="at">pais_destino=</span>COUNT_AREA, <span class="at">tipo_trx=</span>TYP_TRNSCTN, <span class="at">tipo_psp=</span>RL_TRNSCTN, <span class="at">tipo_fraude=</span>FRD_TYP, <span class="at">unidad=</span>UNIT_MEASURE, <span class="at">anio=</span>TIME_PERIOD, <span class="at">monto=</span>OBS_VALUE, <span class="at">tipo_monto=</span>OBS_STATUS, <span class="at">decimales=</span>DECIMALS, <span class="at">descripcion=</span>TITLE, <span class="at">multiplicador_unidad=</span>UNIT_MULT) <span class="ot">-&gt;</span> df</span>
-<span id="cb9-3"><a href="index.html#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="index.html#cb9-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df))  <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="index.html#cb9-5" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="index.html#cb13-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="index.html#cb13-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">clave=</span>KEY, <span class="at">frecuencia=</span>FREQ, <span class="at">pais_origen=</span>REF_AREA, <span class="at">pais_destino=</span>COUNT_AREA, <span class="at">tipo_trx=</span>TYP_TRNSCTN, <span class="at">tipo_psp=</span>RL_TRNSCTN, <span class="at">tipo_fraude=</span>FRD_TYP, <span class="at">unidad=</span>UNIT_MEASURE, <span class="at">anio=</span>TIME_PERIOD, <span class="at">monto=</span>OBS_VALUE, <span class="at">tipo_monto=</span>OBS_STATUS, <span class="at">decimales=</span>DECIMALS, <span class="at">descripcion=</span>TITLE, <span class="at">multiplicador_unidad=</span>UNIT_MULT) <span class="ot">-&gt;</span> df</span>
+<span id="cb13-3"><a href="index.html#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="index.html#cb13-4" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df))  <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="index.html#cb13-5" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table>
 <thead>
@@ -669,10 +680,10 @@ Total payment transactions, incl. cash withdrawals, sent to Bulgaria
 </div>
 <div id="identificación-de-valores-faltantes" class="section level2 unnumbered hasAnchor">
 <h2>Identificación de valores faltantes<a href="index.html#identificaci%C3%B3n-de-valores-faltantes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="index.html#cb10-1" tabindex="-1"></a><span class="fu">missmap</span>(df)</span></code></pre></div>
-<p><img src="eda_payments_files/figure-html/unnamed-chunk-6-1.png" alt="" width="672" /></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="index.html#cb11-2" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="index.html#cb14-1" tabindex="-1"></a><span class="fu">missmap</span>(df)</span></code></pre></div>
+<p><img src="eda_payments_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="index.html#cb15-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="index.html#cb15-2" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)), <span class="at">.names =</span> <span class="st">&quot;NA_{.col}&quot;</span>))</span></code></pre></div>
 <pre><code>##   NA_clave NA_frecuencia NA_pais_origen NA_pais_destino NA_tipo_trx NA_tipo_psp
 ## 1        0             0              0               0           0           0
 ##   NA_tipo_fraude NA_unidad NA_anio NA_monto NA_tipo_monto NA_decimales
