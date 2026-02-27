@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-02-25" />
+<meta name="date" content="2026-02-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -187,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.1" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#gr%C3%A1fico-multiple"><i class="fa fa-check"></i><b>3.1.1</b> Gráfico multiple</a></li>
 <li class="chapter" data-level="3.1.2" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#comparaci%C3%B3n-de-ambas-muestras"><i class="fa fa-check"></i><b>3.1.2</b> Comparación de ambas muestras</a></li>
 <li class="chapter" data-level="3.1.3" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#prueba-de-normalidad"><i class="fa fa-check"></i><b>3.1.3</b> Prueba de normalidad</a></li>
-<li class="chapter" data-level="3.1.4" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#test-de-wilcoxon"><i class="fa fa-check"></i><b>3.1.4</b> test de Wilcoxon</a></li>
+<li class="chapter" data-level="3.1.4" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#test-de-wilcoxon"><i class="fa fa-check"></i><b>3.1.4</b> Test de Wilcoxon</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#an%C3%A1lisis-de-la-variable-de-respuesta-frente-a-las-variables-categ%C3%B3ricas-independientes."><i class="fa fa-check"></i><b>3.2</b> Análisis de la variable de respuesta frente a las variables categóricas independientes.</a>
 <ul>
@@ -199,7 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.6" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-tipo_psp"><i class="fa fa-check"></i><b>3.2.6</b> Variable tipo_psp</a></li>
 <li class="chapter" data-level="3.2.7" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-unidad"><i class="fa fa-check"></i><b>3.2.7</b> Variable unidad</a></li>
 <li class="chapter" data-level="3.2.8" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-anio-a%C3%B1o"><i class="fa fa-check"></i><b>3.2.8</b> Variable anio (año)</a></li>
-<li class="chapter" data-level="3.2.9" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#tipo_monto-1"><i class="fa fa-check"></i><b>3.2.9</b> tipo_monto</a></li>
+<li class="chapter" data-level="3.2.9" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-tipo_monto"><i class="fa fa-check"></i><b>3.2.9</b> Variable tipo_monto</a></li>
 <li class="chapter" data-level="3.2.10" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-descripcion"><i class="fa fa-check"></i><b>3.2.10</b> Variable descripcion</a></li>
 </ul></li>
 </ul></li>
@@ -3560,8 +3560,17 @@ La distibución de monto para el tipo PN es altamente asimetrica, con fuerte con
 <p><img src="eda_payments_files/figure-html/unnamed-chunk-44-1.png" alt="" width="672" />
 La distibución de monto para el tipo XDF es altamente asimetrica, con fuerte concentración de valores bajos y una cantidad significativa de valores extremos altos. Esto indica que aunque la mayoría de las transacciones tienen totales moderados, existen algunas con totales excepcionalmente altos que influyen notablemente en los estadísticos como la media y la desviación estándar.</p>
 
+<p><strong>Carga de datos</strong></p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="analisis-univariado.html#cb51-1" tabindex="-1"></a>datos <span class="sc">%&gt;%</span> </span>
-<span id="cb51-2"><a href="analisis-univariado.html#cb51-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">clave=</span>KEY, <span class="at">frecuencia=</span>FREQ, <span class="at">pais_origen=</span>REF_AREA, <span class="at">pais_destino=</span>COUNT_AREA, <span class="at">tipo_trx=</span>TYP_TRNSCTN, <span class="at">tipo_psp=</span>RL_TRNSCTN, <span class="at">tipo_fraude=</span>FRD_TYP, <span class="at">unidad=</span>UNIT_MEASURE, <span class="at">anio=</span>TIME_PERIOD, <span class="at">monto=</span>OBS_VALUE, <span class="at">tipo_monto=</span>OBS_STATUS, <span class="at">decimales=</span>DECIMALS, <span class="at">descripcion=</span>TITLE, <span class="at">multiplicador_unidad=</span>UNIT_MULT) <span class="ot">-&gt;</span> datos2</span></code></pre></div>
+<span id="cb51-2"><a href="analisis-univariado.html#cb51-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">clave=</span>KEY, <span class="at">frecuencia=</span>FREQ, <span class="at">pais_origen=</span>REF_AREA, <span class="at">pais_destino=</span>COUNT_AREA, <span class="at">tipo_trx=</span>TYP_TRNSCTN, <span class="at">tipo_psp=</span>RL_TRNSCTN, <span class="at">tipo_fraude=</span>FRD_TYP, <span class="at">unidad=</span>UNIT_MEASURE, <span class="at">anio=</span>TIME_PERIOD, <span class="at">monto=</span>OBS_VALUE, <span class="at">tipo_monto=</span>OBS_STATUS, <span class="at">decimales=</span>DECIMALS, <span class="at">descripcion=</span>TITLE, <span class="at">multiplicador_unidad=</span>UNIT_MULT)<span class="sc">%&gt;%</span> </span>
+<span id="cb51-3"><a href="analisis-univariado.html#cb51-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb51-4"><a href="analisis-univariado.html#cb51-4" tabindex="-1"></a>    <span class="at">tipo_fraude =</span> <span class="fu">case_when</span>(</span>
+<span id="cb51-5"><a href="analisis-univariado.html#cb51-5" tabindex="-1"></a>      tipo_fraude <span class="sc">==</span> <span class="st">&quot;_Z&quot;</span> <span class="sc">~</span> <span class="st">&quot;sin fraude&quot;</span>,</span>
+<span id="cb51-6"><a href="analisis-univariado.html#cb51-6" tabindex="-1"></a>      tipo_fraude <span class="sc">==</span> <span class="st">&quot;F&quot;</span>  <span class="sc">~</span> <span class="st">&quot;con fraude&quot;</span>,</span>
+<span id="cb51-7"><a href="analisis-univariado.html#cb51-7" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> tipo_fraude</span>
+<span id="cb51-8"><a href="analisis-univariado.html#cb51-8" tabindex="-1"></a>    ),</span>
+<span id="cb51-9"><a href="analisis-univariado.html#cb51-9" tabindex="-1"></a>    <span class="at">anio =</span> <span class="fu">substr</span>(anio, <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb51-10"><a href="analisis-univariado.html#cb51-10" tabindex="-1"></a>  ) <span class="ot">-&gt;</span> datos2</span></code></pre></div>
 </div>
 </div>
 </div>
