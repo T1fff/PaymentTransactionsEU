@@ -1,3 +1,12 @@
+tab:unnamed-chunk-50
+tab:unnamed-chunk-53
+tab:unnamed-chunk-56
+tab:unnamed-chunk-59
+tab:unnamed-chunk-62
+tab:unnamed-chunk-65
+tab:unnamed-chunk-68
+tab:unnamed-chunk-71
+tab:unnamed-chunk-72
 contexto-inicial
 analisis-univariado
 análisis-exploratorio-bivariado
@@ -17,12 +26,3 @@ variable-unidad
 variable-anio-año
 variable-tipo_monto
 variable-descripcion
-tab:unnamed-chunk-50
-tab:unnamed-chunk-53
-tab:unnamed-chunk-56
-tab:unnamed-chunk-59
-tab:unnamed-chunk-62
-tab:unnamed-chunk-65
-tab:unnamed-chunk-68
-tab:unnamed-chunk-71
-tab:unnamed-chunk-72
