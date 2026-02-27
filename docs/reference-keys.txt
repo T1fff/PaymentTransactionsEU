@@ -1,6 +1,4 @@
 contexto-inicial
-comprobación-de-columna-repetidas
-unit_measure-unit
 analisis-univariado
 análisis-exploratorio-bivariado
 análisis-de-la-variable-de-respuesta-frente-a-las-variables-numéricas

@@ -152,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#diccionario-de-columnas"><i class="fa fa-check"></i>Diccionario de columnas</a></li>
-<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#comprobaci%C3%B3n-de-columna-repetidas"><i class="fa fa-check"></i><b>1.0.1</b> Comprobación de columna repetidas</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#comprobaci%C3%B3n-de-columna-repetidas"><i class="fa fa-check"></i>Comprobación de columna repetidas</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#columnas-a-utilizar"><i class="fa fa-check"></i>Columnas a utilizar</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#dataframe-resultante"><i class="fa fa-check"></i>Dataframe resultante</a></li>
 </ul></li>
@@ -325,12 +325,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>28. UNIT:</strong> Columna copia de UNIT_MEASURE.</p>
 <p><strong>29. UNIT_MULT:</strong> Indica el multiplicador del monto de la transacción.</p>
 </div>
-<div id="comprobación-de-columna-repetidas" class="section level3 hasAnchor" number="1.0.1">
-<h3><span class="header-section-number">1.0.1</span> Comprobación de columna repetidas<a href="index.html#comprobaci%C3%B3n-de-columna-repetidas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="unit_measure-unit" class="section level4 hasAnchor" number="1.0.1.1">
-<h4><span class="header-section-number">1.0.1.1</span> UNIT_MEASURE == UNIT<a href="index.html#unit_measure-unit" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="comprobación-de-columna-repetidas" class="section level3 unnumbered hasAnchor">
+<h3>Comprobación de columna repetidas<a href="index.html#comprobaci%C3%B3n-de-columna-repetidas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="unit_measure-unit" class="section level4 unnumbered hasAnchor">
+<h4>UNIT_MEASURE == UNIT<a href="index.html#unit_measure-unit" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">identical</span>(datos<span class="sc">$</span>UNIT_MEASURE, datos<span class="sc">$</span>UNIT))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="title-title_compl" class="section level4 unnumbered hasAnchor">
+<h4>TITLE == TITLE_COMPL<a href="index.html#title-title_compl" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">identical</span>(datos<span class="sc">$</span>TITLE, datos<span class="sc">$</span>TITLE_COMPL))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 </div>
