@@ -202,6 +202,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2.8" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-anio-a%C3%B1o"><i class="fa fa-check"></i><b>3.2.8</b> Variable anio (año)</a></li>
 <li class="chapter" data-level="3.2.9" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-tipo_monto"><i class="fa fa-check"></i><b>3.2.9</b> Variable tipo_monto</a></li>
 <li class="chapter" data-level="3.2.10" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#variable-descripcion"><i class="fa fa-check"></i><b>3.2.10</b> Variable descripcion</a></li>
+<li class="chapter" data-level="3.2.11" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#conclusi%C3%B3n"><i class="fa fa-check"></i><b>3.2.11</b> Conclusión</a></li>
+<li class="chapter" data-level="3.2.12" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html#referencias"><i class="fa fa-check"></i><b>3.2.12</b> Referencias</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -4598,6 +4600,15 @@ En contraste, en las transacciones sin fraude, aunque A también predomina (72.8
 <div id="variable-descripcion" class="section level3 hasAnchor" number="3.2.10">
 <h3><span class="header-section-number">3.2.10</span> Variable descripcion<a href="análisis-exploratorio-bivariado.html#variable-descripcion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Para este analisis la variable descripcionse excluye frente a tipo_fraude porque corresponde a un código estructural compuesto que integra múltiples atributos técnicos, en esta variable se describe la transacción y dice si hubo fraude, el tipo de transacción y si fue enviada, por lo cual, se tiene esta informacion de otras variables ya analizadas previamente. Asimismo, no se realizará la prueba de independencia para esta variable con la de respuesta porque no es necesario para nuestro análisis y por la forma de esta variable.</p>
+</div>
+<div id="conclusión" class="section level3 hasAnchor" number="3.2.11">
+<h3><span class="header-section-number">3.2.11</span> Conclusión<a href="análisis-exploratorio-bivariado.html#conclusi%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El anterior análisis permitió conocer a profundidas caracteristicas generales del dataset escogido tales como número de observaciones y variables estudiandes. De la misma manera, permitió estudiar el posible impacto en este proyecto de cada una de las columnas listadas, pues, fuera por falta de documentación en la funete original o duplicación de información, no todas eran aptas de ser incluidas. En un reconocimiento inicial se vio que la variable objetivo <strong>tipo_fraude</strong>, se encuentra desbalanceada a favor de observaciones que no presentaron fraude, de la misma forma, se pudo conocer a grandes rasgos, la distribución particular de las variables presentes en los datos como los países origen, destino, año de origen, monto o conteo, tipo de unidad, tipo de multiplicador, tipo de psp, descripción, por mencionar algunas.</p>
+<p>Al compara los tipos de fraude con las diferentes variables se encontró que existe dependencia en la mayoría de casos. Aún así, es importante resaltar que los fraudes se concentran en categorías muy particulares, por ejemplo, en solo una de las categorías de la variable frecuencia se encontraron casos de fraude. Por otro lado, en la variable monto se encontró diferencias significativas entre el grupo en el que se identifica fraude y el grupo en el que no. Los montos suelen ser menores en las transacciones fraudulentas que en las que no lo son.</p>
+</div>
+<div id="referencias" class="section level3 hasAnchor" number="3.2.12">
+<h3><span class="header-section-number">3.2.12</span> Referencias<a href="análisis-exploratorio-bivariado.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><a href="https://data.ecb.europa.eu/data/datasets/PAY/data-information?dataset%5B0%5D=Payments%20transactions%20%28Key%20indicators%29%20%28PAY%29&amp;advFilterDataset%5B0%5D=Payments%20transactions%20%28Key%20indicators%29%20%28PAY%29&amp;layerType=AL&amp;showDatasetModal=false">European Central Bank. Payments transactions (Key indicators) - PAY</a></p>
 
 </div>
 </div>

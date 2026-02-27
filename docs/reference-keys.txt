@@ -26,3 +26,5 @@ variable-unidad
 variable-anio-año
 variable-tipo_monto
 variable-descripcion
+conclusión
+referencias
