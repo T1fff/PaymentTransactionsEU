@@ -7,7 +7,7 @@ tab:unnamed-chunk-65
 tab:unnamed-chunk-68
 tab:unnamed-chunk-71
 tab:unnamed-chunk-72
-detección-de-fraude-en-transacciones-de-pago-de-la-unión-europea.
+análisis-exploratorio-de-datos
 análisis-univariado
 análisis-exploratorio-bivariado
 análisis-de-la-variable-de-respuesta-frente-a-las-variables-numéricas
