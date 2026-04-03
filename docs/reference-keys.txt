@@ -1,12 +1,7 @@
 tab:unnamed-chunk-50
-tab:unnamed-chunk-53
-tab:unnamed-chunk-56
-tab:unnamed-chunk-59
-tab:unnamed-chunk-62
-tab:unnamed-chunk-65
-tab:unnamed-chunk-68
-tab:unnamed-chunk-71
-tab:unnamed-chunk-72
+tab:unnamed-chunk-55
+tab:unnamed-chunk-58
+tab:unnamed-chunk-67
 análisis-exploratorio-de-datos
 análisis-univariado
 análisis-exploratorio-bivariado

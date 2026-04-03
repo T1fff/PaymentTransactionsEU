@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-03-30" />
+<meta name="date" content="2026-04-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -184,6 +184,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="análisis-univariado.html"><a href="análisis-univariado.html#variables-caracter%C3%ADsticas-num%C3%A9ricas"><i class="fa fa-check"></i>Variables Características Numéricas</a>
 <ul>
 <li class="chapter" data-level="" data-path="análisis-univariado.html"><a href="análisis-univariado.html#monto"><i class="fa fa-check"></i>monto</a></li>
+<li class="chapter" data-level="" data-path="análisis-univariado.html"><a href="análisis-univariado.html#tratamiento-de-datos-faltantes-para-la-variable-monto"><i class="fa fa-check"></i>Tratamiento de datos faltantes para la variable “monto”</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="análisis-exploratorio-bivariado.html"><a href="análisis-exploratorio-bivariado.html"><i class="fa fa-check"></i><b>3</b> Análisis Exploratorio Bivariado</a>
@@ -236,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Detección de Fraude en Transacciones de Pago de la Unión Europea.</h1>
 <p class="author"><em>Tiffany Mendoza S. y Sergio Rada</em></p>
-<p class="date"><em>2026-03-30</em></p>
+<p class="date"><em>2026-04-02</em></p>
 </div>
 <div id="análisis-exploratorio-de-datos" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Análisis Exploratorio de Datos<a href="index.html#an%C3%A1lisis-exploratorio-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -713,7 +714,7 @@ Total payment transactions, incl. cash withdrawals, sent to Bulgaria
 ## 1              0         0       0   143875             0            0
 ##   NA_descripcion NA_multiplicador_unidad
 ## 1              0                       0</code></pre>
-<p>Al explorar un poco más el dataset, se encuentra que la mayoría de columnas tienen 0 valores faltantes en las observaciones. Aún así, es importante destacar que la columna monto concentra el total de missing values con 143875 NAs.</p>
+<p>Al explorar un poco más el dataset, se encuentra que la mayoría de columnas tienen 0 valores faltantes en las observaciones. Aún así, es importante destacar que la columna monto concentra el total de missing values con 143875 NAs. El tratamiento será presentado en la siguiente sección.</p>
 
 </div>
 </div>
@@ -777,6 +778,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
