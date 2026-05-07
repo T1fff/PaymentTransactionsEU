@@ -1,0 +1,523 @@
+# Análisis Exploratorio Bivariado 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(car)
+library(ggplot2)
+library(summarytools)
+library(readr)
+library(ggplot2)
+library(nortest)
+library(purrr)
+library(knitr)
+library(kableExtra)
+library(tibble)
+
+datos <- read.csv("df_final.csv")
+
+```
+  
+**Carga de datos**  
+  
+```{r}
+datos %>% 
+  mutate(
+    tipo_fraude = case_when(
+      tipo_fraude == "_Z" ~ "sin fraude",
+      tipo_fraude == "F"  ~ "con fraude",
+      TRUE ~ tipo_fraude
+    ),
+    anio = substr(anio, 1, 4)
+  ) -> datos2
+
+
+```
+
+
+
+
+## Análisis de la variable de respuesta frente a las variables numéricas  
+
+Realizaremos la comparación de la variable "tipo_fraude" correspondiente al tipo de fraude con la única variable númerica del dataset, la cual es "monto" correspondiente al valor de la transacción. En este caso, la variable de respuesta solo tiene dos opciones: "sin fraude" y "con fraude", por tanto, se tomarán estos dos grupos y se analizará el valor de la transacción mediante el grafico de caja y bigotes bivariado para estas variables y se compararán las medias de estos dos grupos independientes, para ello se verificarán los supuestos de normalidad e igualdad de varianza para elegir la prueba correspondiente para al caso.   
+
+### Gráfico multiple
+
+```{r message=FALSE, warning=FALSE}
+datos2 %>%
+  ggplot(aes(x = tipo_fraude, y = monto_final)) +
+  geom_boxplot(fill = "#1E90FF", alpha = 0.6, color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 20, size = 3, color = "red") +
+  labs(
+    descripcion= "Distribución del valor de la transacción según el tipo de fraude",
+    x = "¿Hubo fraude? (y)",
+    y = "valor de la transacción"
+  ) +
+  theme_bw() +
+  theme(
+    plot.descripcion= element_text(hjust = 0.5),
+    strip.background = element_rect(fill = "gray90", color = NA),
+    strip.text = element_text(face = "bold")
+  )
+```
+  
+El gráfico muestra la distribución del valor de la transacciones según su respuesta a si hubo o no fraude. En el gráfico para las operaciones no fraudulentas se observa una alta dispersión y la presencia de numerosos valores extremos, alcanzando montos muy elevados, lo que indica gran variabilidad en transacciones legítimas. En contraste, las transacciones fraudulentas aparecen concentradas en valores bajos y con escasa variabilidad. Este patrón sugiere que el fraude se asocia principalmente a importes reducidos, mientras que los valores altos corresponden mayoritariamente a operaciones no fraudulentas.  
+
+
+### Comparación de ambas muestras  
+
+Gracias a lo anterior, se realizará el análisis de la media de los valores de las transacciones en los grupos donde hubo y no hubo fraude. Para ello se procede realizar un análisis descriptivo básico entre los dos grupos.  
+
+```{r}
+tabla_grupos <- datos2 %>% 
+  group_by(tipo_fraude) %>% 
+  summarise(
+    n = length(monto_final),
+    media = mean(monto_final, na.rm = TRUE),
+    ds = sd(monto_final, na.rm = TRUE),
+    mediana = median(monto_final, na.rm = TRUE),
+    minimo = min(monto_final, na.rm = TRUE),
+    maximo = max(monto_final, na.rm = TRUE),
+    Q1 = quantile(monto_final, 0.25, na.rm = TRUE),
+    Q3 = quantile(monto_final, 0.75, na.rm = TRUE),
+    IQR = IQR(monto_final, na.rm = TRUE)
+  )
+
+tabla_total <- datos2 %>% 
+  summarise(
+    tipo_fraude = "Total",
+    n = n(),
+    media = mean(monto_final, na.rm = TRUE),
+    ds = sd(monto_final, na.rm = TRUE),
+    mediana = median(monto_final, na.rm = TRUE),
+    minimo = min(monto_final, na.rm = TRUE),
+    maximo = max(monto_final, na.rm = TRUE),
+    Q1 = quantile(monto_final, 0.25, na.rm = TRUE),
+    Q3 = quantile(monto_final, 0.75, na.rm = TRUE),
+    IQR = IQR(monto_final, na.rm = TRUE)
+  )
+
+bind_rows(tabla_grupos, tabla_total) %>%
+  knitr::kable(
+    caption = "Estadísticas descriptivas de monto por tipo de fraude",
+    digits = 2,
+    align = "c",
+    col.names = c("Tipo de fraude", "n", "Media", "DS",
+                  "Mediana", "Mínimo", "Máximo",
+                  "Q1", "Q3", "IQR")
+  ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "hover"),
+    full_width = FALSE, 
+    position = "center"
+  ) %>%
+  kableExtra::row_spec(0, bold = TRUE) %>%
+  kableExtra::row_spec(
+    nrow(bind_rows(tabla_grupos, tabla_total)),
+    bold = TRUE,
+    background = "#EFEFEF"
+  ) %>%
+  kableExtra::scroll_box(
+    width = "100%",
+    height = "400px"
+  )
+```
+
+La distribución del valor de las transacciones según hubo fraude o no muestra diferencias relevantes en las medidas de tendencia central. Se observa que la media es considerablemente mayor en el grupo sin fraude que en el grupo con fraude; sin embargo, las medianas en ambos casos son cercanas a cero, lo que indica una distribución fuertemente asimétrica hacia la derecha. Esta asimetría se confirma por las desviaciones estándar extremadamente elevadas y por la presencia de valores máximos muy grandes, lo que sugiere la existencia de valores atípicos significativos. En este contexto, la mediana y el rango intercuartílico resultan medidas más representativas que la media, y podría considerarse una transformación logarítmica para estabilizar la varianza y mejorar el análisis; sin embargo, existen valores negativos y no es muy viable.  
+
+
+### Prueba de normalidad 
+
+En esta ocasión se usará la prueba de Anderson-Darling porque las muestras son grandes y con cola hacia la derecha muy pronunciada.  
+```{r}
+ad.test(datos2$monto_final[datos2$tipo_fraude == "con fraude"])
+ad.test(datos2$monto_final[datos2$tipo_fraude == "sin fraude"])
+```
+
+Con un nivel de confianza del 95% y dado que en ambas pruebas el p-valor es menor a 0.05, se puede concluir que ambas poblaciones no siguen una distribución normal.  
+
+### Test de Wilcoxon  
+
+Se realizará el siguiente test de Wilcoxon porque es no paramétrico y responde a grupos que no siguen una distribución normal.  
+
+```{r}
+grupo_F  <- datos2$monto_final[datos2$tipo_fraude == "con fraude"]
+grupo_Z  <- datos2$monto_final[datos2$tipo_fraude == "sin fraude"]
+
+wilcox.test(grupo_F, grupo_Z)
+```
+
+La prueba de Wilcoxon arrojó un p-valor extremadamente pequeño menor a 0.05, lo que indica que se rechaza la hipótesis nula de igualdad en la distribución (o mediana) del monto de la transacción(monto) entre los grupos con fraude y sin fraude. En consecuencia, existe diferencia estadísticamente significativa de que los montos de las transacciones. Entonces, el valor de la transacción no se comporta de la misma manera en operaciones fraudulentas y no fraudulentas, lo que constituye un indicio de dependencia entre ambas variables.
+
+## Análisis de la variable de respuesta frente a las variables categóricas independientes.    
+
+### Variable clave
+
+Para este analisis la variable clave (clave compuesta de la transacción) se excluye frente al tipo de fraude (tipo_fraude) porque presenta baja frecuencia por categoría, haciendo que sea poco interpretable. Además, clave corresponde a un código estructural compuesto que integra múltiples atributos técnicos, por lo que no representa una característica explicativa independiente con significado analítico propio.   
+
+### Variable frecuencia  
+
+**Gráfico de barras multiple**  
+
+```{r}
+df_plot <- datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(frecuencia, name = "n") %>%
+  mutate(
+    categoria = frecuencia,
+    variable = "frecuencia",
+    porcentaje = (n / sum(n)) * 100
+  ) %>%
+  select(tipo_fraude, categoria, n, porcentaje)
+
+df_plot %>% 
+  ggplot(aes(x = categoria, y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity",
+           position = position_dodge(width = 0.9)) +   
+  geom_text(
+    aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+    position = position_dodge(width = 0.9),
+    vjust = -0.3,
+    size = 3
+  ) +
+  labs(
+    descripcion = "Frecuencia con las que se hacen las transacciones (frecuencia)",
+    x = "Frecuencia con las que se hacen las transacciones (frecuencia)",
+    y = "Cantidad de transacciones"
+  ) +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2", direction = -1) +
+  scale_x_discrete(labels = c(
+  "A" = "Anual(A)",
+  "H" = "Mitad de año(H)",
+  "Q" = "Trimestral(Q)"
+  ))
+```
+
+El gráfico muestra que la gran mayoría de las transacciones corresponden a la clase sin fraude, distribuyéndose principalmente en las categorías A (41.7%) y H (35.6%), mientras que Q representa una proporción menor. En contraste, los casos de fraude son extremadamente pocos y se concentran completamente en una sola categoría de frecuencia (H), lo que evidencia el fuerte desbalance de la variable respuesta. Esta diferencia sugiere que las transacciones realizadas con frecuencia a mitad de año son más propensas a que sean fraude y en otro caso es casi nula esta posibilidad.      
+
+### Variable pais_origen   
+
+Para el análisis de esta variable se realizará la tabla de contingencia con todas las categorías y el gráfico de barras múltiple solo con las 5 paises o zonas donde hubo más fraude. En este caso, no se hizo solamente el diagrama de barras porque hay muchas categorías diferentes.   
+
+```{r}
+datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(pais_origen, name = "n") %>%
+  mutate(categoria = pais_origen,
+    variable = "pais_origen",
+    porcentaje = (n / sum(n)) * 100,
+    ) %>%
+  select(tipo_fraude, variable, categoria, n, porcentaje) %>% 
+  arrange(desc(n))->tabla_COUNTRY
+kable(tabla_COUNTRY,
+      caption = "Distribución de pais_origen según tipo_fraude",
+      align = "c") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center",
+    font_size = 14
+  ) %>%
+  scroll_box(height = "400px") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+La distribución del país de origen según la respuesta de si hubo fraude o no muestra diferencias relevantes en los patrones observados. En los casos donde se registró mayor proporción de fraude, el 5.86% corresponde a transacciones al area europea (U2), el 5.76% a estados miembros e instituciones de la Unión Europea (B0) y el 3.8% a España (ES). En contraste, en el grupo sin fraude, la mayor proporción (4.35%) corresponde al país de Romania(RO), mientras que el 4.34% a Hungria (HU) y el 4.26% a Polonia (PL) presentan valores ligeramente inferiores.  
+ 
+
+**Gráfico de barras multiple**  
+
+```{r}
+top5_paises <- datos2 %>%
+  filter(tipo_fraude == "con fraude") %>%
+  count(pais_origen, name = "n") %>%
+  arrange(desc(n)) %>%
+  slice_head(n = 5) %>%
+  pull(pais_origen)
+df_plot <- datos2 %>%
+  filter(pais_origen %in% top5_paises) %>%
+  count(pais_origen, tipo_fraude, name = "n") %>%
+  group_by(pais_origen) %>%
+  mutate(porcentaje = n / sum(n) * 100) %>%
+  ungroup()
+ggplot(df_plot, aes(x = pais_origen, y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.9),
+            vjust = -0.3,
+            size = 3) +
+  labs(descripcion= "Top 5 países con mayor número de fraudes",
+       x = "País o Área (pais_origen)",
+       y = "Número de transacciones",
+       fill = "Tipo") +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2", direction = -1)+
+  scale_x_discrete(labels = c(
+  "B0" = "Unión Europea (B0)",
+  "ES" = "España (ES)",
+  "GR" = "Grecia (Q)",
+  "SK" = "Eslovaquia (SK)",
+  "U2" = "Area europea (U2)"
+  ))
+```
+
+El gráfico muestra que, aunque estos cinco países concentran el mayor número absoluto de fraudes, la proporción de transacciones fraudulentas dentro de cada país sigue siendo muy baja en comparación con las no fraudulentas. En todos los casos, más del 96% de las transacciones corresponden a la categoría sin fraude, mientras que los fraudes representan entre aproximadamente 0.3% y 3.5% del total por país. Por tanto, esto sigue demostrando el fuerte desvalance de la variable de respuesta.   
+Esta diferencia sugiere las zonas donde es más propenso a que las transacciones realizadas sean fraude son: en el pais de España y en las zonas del area Europea y Union Europea, mientras que las transacciones de países como RO, HU y PL tienden a concentrarse en operaciones sin fraude, lo que podría ser relevante para estrategias de segmentación o análisis de comportamiento. 
+
+### Variable pais_destino   
+
+Para el análisis de esta variable se realizará la tabla de contingencia con todas las categorías y el gráfico de barras múltiple solo con el país de destino donde hubo fraude. En este caso, no se hizo solamente el diagrama de barras porque hay muchas categorías diferentes.  
+
+```{r}
+datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(pais_destino, name = "n") %>%
+  mutate(categoria = pais_destino,
+    variable = "pais_destino",
+    porcentaje = (n / sum(n)) * 100,
+    ) %>%
+  select(tipo_fraude, variable, categoria, n, porcentaje) %>% 
+  arrange(desc(n))->tabla_ORGANIZATION
+kable(tabla_ORGANIZATION,
+      caption = "Distribución de pais_destino según tipo_fraude",
+      align = "c") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center",
+    font_size = 14
+  ) %>%
+  scroll_box(height = "400px") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+La distribución de pais_destino según tipo_fraude muestra que las transacciones no fraudulentas se encuentran ampliamente distribuidas entre diversas áreas geográficas, destacándose entidades areas de referencia del mundo (W0) como la categoría con mayor participación (13.13%), seguida por el resto del mundo (W1) y hogares del mundo (W2), mientras que el resto de áreas presentan proporciones relativamente homogéneas alrededor del 2–3%.   
+En contraste, los casos de fraude se concentran totalmente en la categoría W0, representando el 100% de los registros fraudulentos observados. Esta estructura evidencia una fuerte concentración geográfica del fraude frente a una distribución más diversificada de las transacciones legítimas, lo que sugiere que el riesgo no es uniforme entre áreas y que esta variable podría aportar capacidad explicativa en un modelo de clasificación.  
+
+**Gráfico de cajas multiple**  
+
+```{r}
+top5_paises <- datos2 %>%
+  filter(tipo_fraude == "con fraude") %>%
+  count(pais_destino, name = "n") %>%
+  arrange(desc(n)) %>%
+  slice_head(n = 5) %>%
+  pull(pais_destino)
+df_plot <- datos2 %>%
+  filter(pais_destino %in% top5_paises) %>%
+  count(pais_destino, tipo_fraude, name = "n") %>%
+  group_by(pais_destino) %>%
+  mutate(porcentaje = n / sum(n) * 100) %>%
+  ungroup()
+ggplot(df_plot, aes(x = pais_destino, y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.9),
+            vjust = -0.3,
+            size = 3) +
+  labs(descripcion= "Top 5 países con mayor número de fraudes",
+       x = "País (pais_destino)",
+       y = "Número de transacciones",
+       fill = "Tipo") +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2",direction = -1)+
+  scale_x_discrete(labels = c(
+  "W0" = "Mundo, todas las entidades, incluido el área de referencia (W0)"
+  ))
+```
+
+El gráfico evidencia que el área W0 (Mundo, todas las entidades, incluido el área de referencia, incluido IO) concentra la totalidad de los fraudes observados (1,944 casos), aunque estos representan solo el 2.2% del total de transacciones en esa región, frente al 97.8% correspondiente a operaciones no fraudulentas. Esto indica que, si bien el fraude está focalizado geográficamente en W0, su ocurrencia sigue siendo baja en términos proporcionales, confirmando el fuerte desbalance de la variable.  
+
+
+### Variable tipo_trx  
+
+**Gráfico de barras múltiple**   
+
+
+```{r}
+top5_paises <- datos2 %>%
+  filter(tipo_fraude == "con fraude") %>%
+  count(tipo_trx, name = "n") %>%
+  arrange(desc(n)) %>%
+  pull(tipo_trx)
+
+df_plot <- datos2 %>%
+  filter(tipo_trx %in% top5_paises) %>%
+  count(tipo_trx, tipo_fraude, name = "n") %>%
+  group_by(tipo_trx) %>%
+  mutate(porcentaje = n / sum(n) * 100) %>%
+  ungroup()
+
+ggplot(df_plot, aes(x = reorder(tipo_trx, n), y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.7), width = 0.6) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.7),
+            hjust = -0.08,
+            size = 3) +
+  labs(title = "Todos los tipos de transacción con fraudes",
+       x = "Tipo de transacción",
+       y = "Número de transacciones",
+       fill = "Tipo") +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2", direction = -1) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.25))) +
+  scale_x_discrete(labels = c(
+    "CP0"  = "Pagos con tarjeta (CP0)",
+    "CT0"  = "Transferencias de crédito (CT0)",
+    "DD"   = "Débitos directos (DD)",
+    "EMP0" = "Pagos con dinero electrónico (EMP0)",
+    "TOTL" = "Transacciones de pagos totales (TOTL)"
+  )) +
+  coord_flip(clip = "off")
+```
+
+En el gráfico se muestran que los tipos de transferencia con pagos con tarjeta (CPO), Transferencias de crédito (CTO), débitos directos (DD), Pagos con dinero electrónico (EMPO) y Transacciones de pago totales (TOTL) concentran el mayor número absoluto de fraudes, la proporción de transacciones fraudulentas dentro de cada tipo sigue siendo muy baja en comparación con las no fraudulentas. En todos los casos, más del 98% de las transacciones corresponden a la categoría sin fraude, mientras que los fraudes representan entre aproximadamente 0.1% y 1.2% del total por cada tipo de transacción. Por tanto, esto sigue demostrando el fuerte desvalance de la variable de respuesta y refleja que son excasos los casos de fraude frente a donde no hay.  
+
+
+### Variable tipo_psp  
+
+```{r}
+df_plot <- datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(tipo_psp, name = "n") %>%
+  mutate(categoria = tipo_psp,
+    variable = "tipo_psp",
+    porcentaje = (n / sum(n)) * 100) %>%
+  select(tipo_fraude, categoria, n, porcentaje)
+
+df_plot %>% 
+  ggplot(aes(x = categoria, y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.9),
+            vjust = -0.3,
+            size = 3) +
+  labs(descripcion= "Rol de las transacciones",
+       x = "Rol de las transacciones(tipo_psp)",
+       y = "Cantclavead de transacciones"
+  ) +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2", direction = -1) +
+  scale_x_discrete(labels = c(
+  "_Z" = "No aplica (_Z)",
+  "1" = "PSP del pagador (1)",
+  "2" = "PSP del beneficiario (2)"
+  ))
+```
+La distribución de tipo_psp según la respuesta si hubo fraude o no, muestra diferencias relevantes en los patrones de respuesta. Entre las transacciones donde hubo fraude, el 61.93% corresponden a transacciones con rol tipo 1(PSP del pagador) y el 38.06% del tipo 2(PSP del beneficiario). En contraste, en el grupo donde no hubo fraude, la mayoría 58.5% fueron transacciones del rol tipo 1, mientras que el 40.87% al rol tipo 2 y 0.61% no aplica (_Z). Esta diferencia sugiere que las transacciones del rol tipo 1 son más propensas a que sean fraude, En general, las transacciones del tipo 1 son las que más se usan y son las que tienen mayor porcentaje de fraude respecto a las de tipo 2, lo que indica que tanto el volumen total como los eventos fraudulentos se concentran principalmente en el PSP del pagador.  
+
+
+### Variable unidad  
+
+**Gráfico de barras multiple**
+
+```{r}
+df_plot <- datos2 %>%
+  count(unidad, tipo_fraude, name = "n") %>%
+  group_by(unidad) %>%
+  mutate(porcentaje = n / sum(n) * 100) %>%
+  ungroup()
+
+n_unidades <- n_distinct(df_plot$unidad)
+
+ggplot(df_plot, aes(x = reorder(unidad, n), y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.7), width = 0.6) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.7),
+            hjust = -0.08,
+            size = 2.8) +
+  labs(title = "Distribución de fraudes por divisa (escala log)",
+       x       = "Divisa o unidad de la transacción",
+       y       = "Número de transacciones (escala logarítmica)",
+       fill    = "Tipo",
+       caption = "Nota: eje en escala log₁₀ para visualizar mejor valores pequeños") +
+  theme_bw() +
+  theme(
+    axis.text.y     = element_text(size = 9),
+    legend.position = "bottom"
+  ) +
+  scale_y_log10(
+    labels = scales::comma,
+    expand = expansion(mult = c(0, 0.4))
+  ) +
+  annotation_logticks(sides = "b") +
+  scale_fill_brewer(palette = "Set2", direction = -1) +
+  coord_flip(clip = "off")
+
+ggsave("grafico_unidades.png",
+       width     = 12,
+       height    = max(5, n_unidades * 0.6),
+       dpi       = 150,
+       limitsize = FALSE)
+```
+
+
+La mayoría de las transacciones se registran en la categoría sin fraude, con proporciones cercanas al 99.7% en todas las unidades, mientras que las transacciones con fraude representa apenas alrededor del 0.3%. Aunque número puro (PN), Euro (EUR) y moneda nacional (XDF) concentran los mayores volúmenes, la incidencia relativa del fraude se mantiene estable entre monedas, lo que sugiere que el fraude se explica más por el volumen total de operaciones que por la unidad de transacción. Por tanto, las transacciones hechas con PN, EUR y XDF son más propensas a que tengan fraude, pero son proporcionalmente insignificantes frente a los casos donde no hubo en esas mismas categorías de monedas.   
+  
+
+### Variable anio (año)  
+
+```{r}
+datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(anio, name = "n") %>%
+  mutate(categoria = anio,
+    variable = "anio",
+    porcentaje = (n / sum(n)) * 100,
+    ) %>%
+  select(tipo_fraude, variable, categoria, n, porcentaje) %>% 
+  head(n=40)->tabla_anio
+kable(tabla_anio,
+      caption = "Distribución de anio según tipo_fraude",
+      align = "c") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    position = "center",
+    font_size = 14
+  ) %>%
+  scroll_box(height = "400px") %>% 
+  row_spec(0, bold = TRUE)
+```
+
+
+Para este analisis la variable anio (año) se excluye frente a tipo_fraude porque presenta baja frecuencia por categoría, haciendo que sea poco interpretable. Además, anio corresponde a un código estructural compuesto que integra múltiples atributos técnicos, por lo que no representa una característica explicativa independiente con significado analítico propio. Cabe aclarar que aparecen pocas filas porque solo se mostraron las 40 primeras. Asimismo, no se realizará la prueba de independencia para esta variable con la de respuesta porque no es necesario para nuestro análisis y por la forma de esta variable. Lo único que se puede extraer de esta tabla es que en el año 2022, 2023 y 2024 fueron los años donde más fraude hubo, en el contexto de esta nueva era tecnológica producto del covid 19.  
+
+### Variable tipo_monto  
+
+**Gráfico de barras multiple**  
+
+```{r, fig.width=14, fig.height=6}
+df_plot <- datos2 %>%
+  group_by(tipo_fraude) %>%
+  count(tipo_monto, name = "n") %>%
+  mutate(categoria = tipo_monto,
+    variable = "tipo_monto",
+    porcentaje = (n / sum(n)) * 100) %>%
+  select(tipo_fraude, categoria, n, porcentaje)
+
+df_plot %>% 
+  ggplot(aes(x = categoria, y = n, fill = tipo_fraude)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(aes(label = paste0(n, " (", round(porcentaje, 1), "%)")),
+            position = position_dodge(width = 0.9),
+            vjust = -0.3,
+            size = 3) +
+  labs(descripcion= "Estado de la observación del valor de la transacción (tipo_monto)",
+       x = "Estado de la observación del valor de la transacción (tipo_monto)",
+       y = "Cantclavead de transacciones"
+  ) +
+  theme_bw() +
+  scale_fill_brewer(palette = "Set2", direction = -1) 
+```
+
+Para este análisis, en la variable tipo_monto no se excluirán las categorías L (valor faltante; los datos existen pero no fueron recopilados), M (valor faltante; los datos no pueden existir) y Q (valor faltante; suprimido), porque, a pesar de que corresponden a valores faltantes, la variable de respuesta de la investigación es si hubo o no fraude. Por tanto, se busca identificar este aspecto antes que determinar de cuánto fue el fraude.  
+En este caso, la distribución del estado de la observación según tipo_fraude muestra diferencias relevantes en los patrones observados. Entre las transacciones con fraude (F), la categoría A (valor normal) es claramente mayoritaria (75.87%), seguida por P (valor provisional) (12.91%) y Q (valor faltante; reprimido) (9.05%), mientras que M (valor faltante; los datos no pueden existir) presenta una participación reducida (2.16%).  
+En contraste, en las transacciones sin fraude, aunque A también predomina (72.85%), se aprecia una mayor presencia relativa de Q (14.14%), M (7.41%) y P (5.30%), además de categorías marginales como E y L. Esta diferencia sugiere que los eventos de fraude tienden a concentrarse principalmente en el estado A, mientras que las operaciones legítimas presentan una distribución más diversificada, lo que podría ser relevante para el análisis de riesgo y la identificación de patrones de comportamiento. 
+
+El gráfico de tipo_monto indica que la categoría A(valor normal) concentra la mayor parte de las transacciones (≈72.9%), seguida por Q(valor faltante; suprimido) con un 14.1%, M(valor faltante; los datos no pueden existir)  con 7.4% y P(valor prosivional) con 5.3%, mientras que E(valor estimado) y L(Valor faltante; los datos existen pero no fueron recopilados.) son marginales. En los casos de fraude (F) se mantiene la misma estructura general, con predominio de A, aunque con una participación relativamente mayor en P y Q frente al conjunto total. Esto sugiere que, si bien la distribución global está dominada por A, ciertas categorías como P y Q adquieren mayor relevancia relativa dentro de las operaciones fraudulentas.   
+
+
+### Variable descripcion  
+
+Para este analisis la variable descripcionse excluye frente a tipo_fraude porque corresponde a un código estructural compuesto que integra múltiples atributos técnicos, en esta variable se describe la transacción y dice si hubo fraude, el tipo de transacción y si fue enviada, por lo cual, se tiene esta informacion de otras variables ya analizadas previamente. Asimismo, no se realizará la prueba de independencia para esta variable con la de respuesta porque no es necesario para nuestro análisis y por la forma de esta variable.  

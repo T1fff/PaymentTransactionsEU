@@ -23,7 +23,7 @@
 <meta name="author" content="Tiffany Mendoza S. y Sergio Rada" />
 
 
-<meta name="date" content="2026-04-10" />
+<meta name="date" content="2026-05-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -153,9 +153,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivo-general"><i class="fa fa-check"></i>Objetivo General</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#objetivos-espec%C3%ADficos"><i class="fa fa-check"></i>Objetivos Específicos</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#origen-y-descripci%C3%B3n-del-dataset"><i class="fa fa-check"></i>Origen y descripción del dataset</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#metodolog%C3%ADa"><i class="fa fa-check"></i>Metodología</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#origen-y-descripci%C3%B3n-del-dataset"><i class="fa fa-check"></i>Origen y descripción del dataset</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#variables-preprocesamiento-y-divisi%C3%B3n-de-los-datos"><i class="fa fa-check"></i>Variables, Preprocesamiento y División de los Datos</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#modelos-estrategias-de-balanceo-y-optimizaci%C3%B3n-de-hiperpar%C3%A1metros"><i class="fa fa-check"></i>Modelos, Estrategias de Balanceo y Optimización de Hiperparámetros</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#m%C3%A9tricas-de-evaluaci%C3%B3n-comparaci%C3%B3n-estad%C3%ADstica-e-interpretabilidad"><i class="fa fa-check"></i>Métricas de Evaluación, Comparación Estadística e Interpretabilidad</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#caracterizaci%C3%B3n-general"><i class="fa fa-check"></i>Caracterización general</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#diccionario-de-columnas"><i class="fa fa-check"></i>Diccionario de columnas</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#comprobaci%C3%B3n-de-columna-repetidas"><i class="fa fa-check"></i>Comprobación de columna repetidas</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#columnas-a-utilizar"><i class="fa fa-check"></i>Columnas a utilizar</a></li>
@@ -238,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Detección de Fraude en Transacciones de Pago de la Unión Europea.</h1>
 <p class="author"><em>Tiffany Mendoza S. y Sergio Rada</em></p>
-<p class="date"><em>2026-04-10</em></p>
+<p class="date"><em>2026-05-06</em></p>
 </div>
 <div id="análisis-exploratorio-de-datos" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Análisis Exploratorio de Datos<a href="index.html#an%C3%A1lisis-exploratorio-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -264,11 +270,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 </div>
 </div>
-<div id="origen-y-descripción-del-dataset" class="section level2 unnumbered hasAnchor">
-<h2>Origen y descripción del dataset<a href="index.html#origen-y-descripci%C3%B3n-del-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>El presente dataset muestra estadisticas de alto nivel sobre el total de transacciones financieras legales y fraudulentas realizadas en la Unión Europea. Esta información es recolectada por el Banco Central Europeo (ECB), entidad que valida semestralmente los reportes enviados por los Bancos Centrales Nacionales del continente. La última actualización fue realizada el 29 de enero del presente año y se encuentra disponible en el repositorio publico de datos del ECB.</p>
-<div id="caracterización-general" class="section level3 unnumbered hasAnchor">
-<h3>Caracterización general<a href="index.html#caracterizaci%C3%B3n-general" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="metodología" class="section level2 unnumbered hasAnchor">
+<h2>Metodología<a href="index.html#metodolog%C3%ADa" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="origen-y-descripción-del-dataset" class="section level3 unnumbered hasAnchor">
+<h3>Origen y descripción del dataset<a href="index.html#origen-y-descripci%C3%B3n-del-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>El presente dataset muestra estadísticas de alto nivel sobre el total de transacciones financieras legales y fraudulentas realizadas en la Unión Europea. Esta información es recolectada por el Banco Central Europeo (ECB), entidad que valida semestralmente los reportes enviados por los Bancos Centrales Nacionales del continente. La última actualización fue realizada el 29 de enero del presente año y se encuentra disponible en el repositorio público de datos del ECB.</p>
+</div>
+<div id="variables-preprocesamiento-y-división-de-los-datos" class="section level3 unnumbered hasAnchor">
+<h3>Variables, Preprocesamiento y División de los Datos<a href="index.html#variables-preprocesamiento-y-divisi%C3%B3n-de-los-datos" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Para el modelado se seleccionaron ocho variables a partir del dataset original de 29 columnas, descartando aquellas con información duplicada, documentación insuficiente o sin aporte predictivo. Las variables de entrada son siete categóricas —<code>frecuencia</code>, <code>pais_origen</code>, <code>pais_destino</code>, <code>tipo_trx</code>, <code>tipo_psp</code>, <code>unidad</code> y <code>tipo_monto</code>— más la variable numérica <code>monto_final</code>, que corresponde al monto de la transacción transformado mediante <code>log1p</code> para comprimir la distribución sesgada a la derecha y reducir el efecto de outliers; previamente se filtraron los registros con monto negativo, ya que ninguno presentaba fraude. La variable objetivo <code>tipo_fraude_bin</code> es binaria (1 = con fraude, 0 = sin fraude) y presenta un <strong>desbalanceo crítico del 0.3%</strong> de casos positivos, lo que condicionó todas las decisiones de diseño posteriores. El preprocesamiento se implementó dentro de un <code>ColumnTransformer</code> de scikit-learn —clonado individualmente en cada pipeline mediante <code>clone(preprocessor)</code> para garantizar independencia entre experimentos— que aplica <code>SimpleImputer(mediana) → StandardScaler</code> para la variable numérica e <code>SimpleImputer(moda) → OneHotEncoder(drop='first')</code> para las categóricas, asegurando que ningún parámetro de transformación se ajuste con información del conjunto de prueba. Los datos se dividieron en 80% entrenamiento (526.354 registros) y 20% prueba (131.589 registros) con <code>train_test_split</code> estratificado, preservando la proporción de clases en ambas particiones.</p>
+</div>
+<div id="modelos-estrategias-de-balanceo-y-optimización-de-hiperparámetros" class="section level3 unnumbered hasAnchor">
+<h3>Modelos, Estrategias de Balanceo y Optimización de Hiperparámetros<a href="index.html#modelos-estrategias-de-balanceo-y-optimizaci%C3%B3n-de-hiperpar%C3%A1metros" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Se evaluaron seis algoritmos de clasificación que cubren un espectro deliberado de complejidad: <strong>Regresión Logística</strong> (L1/L2, solver <em>saga</em>) como baseline lineal; <strong>Naive Bayes</strong> implementado con <code>partial_fit</code> por lotes para manejar el volumen de datos; <strong>LinearSVC</strong> calibrado con <code>CalibratedClassifierCV</code> para obtener probabilidades; <strong>XGBoost</strong> con <code>tree_method='hist'</code> y aceleración GPU; <strong>LightGBM</strong> con <code>device='gpu'</code>, que ofrece tiempos de entrenamiento comparables a XGBoost con una implementación diferente del boosting por histogramas; y <strong>Random Forest</strong>. Cada modelo fue evaluado bajo cuatro estrategias de manejo del desbalanceo: sin balanceo, SMOTE, ADASYN y ajuste de pesos de clase (<em>class weights</em>), integradas directamente en pipelines <code>ImbPipeline</code> de imbalanced-learn para evitar data leakage durante la validación cruzada. La optimización de hiperparámetros se realizó con <code>RandomizedSearchCV</code> usando validación cruzada <code>StratifiedKFold</code> con <strong>k=10</strong> pliegues —configuración más robusta que el k=5 estándar, que reduce la varianza de las estimaciones a costa de mayor tiempo de cómputo— con distribuciones de búsqueda continuas (<code>loguniform</code>, <code>uniform</code>, <code>randint</code>). La métrica de refit para seleccionar el mejor estimador dentro de cada búsqueda fue el <strong>F1-Score</strong>, que actúa como métrica de optimización durante el entrenamiento por su capacidad de penalizar configuraciones extremas donde la precisión o el recall colapsan; el PR-AUC se reserva como métrica de evaluación final sobre el conjunto de prueba. La función <code>optimizar_modelo</code> incorpora además un parámetro <code>n_iter_override</code> que permite ajustar el número de iteraciones de búsqueda por modelo sin modificar la función base.</p>
+</div>
+<div id="métricas-de-evaluación-comparación-estadística-e-interpretabilidad" class="section level3 unnumbered hasAnchor">
+<h3>Métricas de Evaluación, Comparación Estadística e Interpretabilidad<a href="index.html#m%C3%A9tricas-de-evaluaci%C3%B3n-comparaci%C3%B3n-estad%C3%ADstica-e-interpretabilidad" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Dado el desbalanceo extremo, la métrica principal de evaluación final fue el <strong>PR-AUC</strong> (área bajo la curva Precision-Recall), que ignora los verdaderos negativos y mide directamente la capacidad del modelo para detectar fraudes con alta precisión; complementariamente se reportaron ROC-AUC, recall, precision y F1-score. La comparación estadística entre modelos se realizó con <strong>Bootstrap de 1.000 iteraciones</strong> sobre el conjunto de prueba, calculando intervalos de confianza empíricos al 95% para el PR-AUC y p-valores aproximados para diferencias de ROC-AUC entre pares. Los resultados mostraron que ninguna técnica de balanceo mejoró el PR-AUC real: SMOTE, ADASYN y class weights elevaron el recall a ~1.0 a costa de una precisión tan baja que haría inviable el sistema en producción. <strong>Random Forest sin balanceo</strong> obtuvo el mejor PR-AUC test (0.9659, IC=[0.9537, 0.9761]) y <strong>XGBoost sin balanceo</strong> alcanzó 0.9522 (IC=[0.9357, 0.9656]); ambos son estadísticamente indistinguibles en ROC-AUC (p=0.922), pero XGBoost fue seleccionado como modelo final por ser ~10 veces más rápido (55.8 s vs. 535.3 s). LightGBM se incorporó al análisis como alternativa de boosting por histogramas, permitiendo comparar directamente dos implementaciones del mismo paradigma algorítmico bajo idénticas condiciones de evaluación. Finalmente, se aplicó <strong>LIME</strong> (<em>Local Interpretable Model-agnostic Explanations</em>) a las tres observaciones con mayor probabilidad predicha de fraude en los modelos finalistas, revelando de forma consistente que el destino geográfico (<code>pais_destino_W0</code>) y el tipo de transacción (<code>tipo_trx_CP0</code>) son los predictores locales más fuertes de fraude, mientras que el monto tuvo un peso relativo menor al esperado.</p>
+</div>
+</div>
+<div id="caracterización-general" class="section level2 unnumbered hasAnchor">
+<h2>Caracterización general<a href="index.html#caracterizaci%C3%B3n-general" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Como veremos a continuación, el dataset cuenta con <strong>662.616</strong> transacciones caracterizadas en <strong>29</strong> columnas que serán descritas en la siguiente sección.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a><span class="fu">nrow</span>(datos)</span></code></pre></div>
 <pre><code>## [1] 662616</code></pre>
@@ -314,7 +336,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  $ TITLE_COMPL     : chr  &quot;Total payment transactions, incl. cash withdrawals, sent to Bulgaria&quot; &quot;Total payment transactions, incl. cash withdrawals, sent to Bulgaria&quot; &quot;Total payment transactions, incl. cash withdrawals, sent to Bulgaria&quot; &quot;Total payment transactions, incl. cash withdrawals, sent to Bulgaria&quot; ...
 ##  $ UNIT            : chr  &quot;PN&quot; &quot;PN&quot; &quot;PN&quot; &quot;PN&quot; ...
 ##  $ UNIT_MULT       : int  6 6 6 6 6 6 6 6 6 6 ...</code></pre>
-</div>
 <div id="diccionario-de-columnas" class="section level3 unnumbered hasAnchor">
 <h3>Diccionario de columnas<a href="index.html#diccionario-de-columnas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><strong>1. KEY:</strong> Clave compuesta de transacción</p>

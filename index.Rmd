@@ -1,0 +1,215 @@
+--- 
+title: "Detección de Fraude en Transacciones de Pago de la Unión Europea."
+author: "Tiffany Mendoza S. y Sergio Rada"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "Se presenta el análisis exploratorio inicial del dataset escogido sobre transacciones bancarias presentadas por los bancos centrales de la Unión Europea"
+---
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+# Análisis Exploratorio de Datos
+##  Contexto inicial  {.unnumbered}
+El sistema financiero europeo constituye uno de los ecosistemas de pagos más integrados y regulados a nivel mundial. La creación de la Unión Europea como bloque político y económico supranacional ha impulsado el desarrollo de infraestructuras compartidas que permiten el flujo de capital entre sus estados miembro de manera casi instantánea. En este marco, el sistema T2, propiedad y operado por el Eurosistema, actúa como pieza clave de la integración financiera en la UE, habilitando la libre circulación de dinero a través de fronteras y apoyando la implementación de la política monetaria única del BCE [1]. Esta arquitectura técnica, que desde marzo de 2023 reemplazó a TARGET2, provee servicios centrales de gestión de liquidez, incluyendo liquidación bruta en tiempo real de pagos interbancarios, liquidación de valores y pagos instantáneos [1, 2].
+
+No obstante, la creciente digitalización de las transacciones financieras ha traído consigo un aumento sostenido de las actividades fraudulentas. El valor total de transacciones fraudulentas en el Espacio Económico Europeo ascendió a €4,2 billones en 2024, frente a €3,5 billones en 2023 y €3,4 billones en 2022, de acuerdo con datos de proveedores de servicios de pago recopilados por el BCE y la EBA [3]. Los nuevos tipos de fraude, especialmente aquellos que implican la manipulación de los pagadores para que inicien transacciones no autorizadas, registran una tendencia creciente que exige el desarrollo de enfoques de mitigación más sofisticados y adaptativos [3]. Esta realidad hace urgente la construcción de herramientas analíticas capaces de identificar patrones anómalos en grandes volúmenes de datos transaccionales.
+
+Frente a este escenario, el aprendizaje automático se ha consolidado como una de las aproximaciones más prometedoras para la detección de fraude financiero. Una revisión sistemática de la literatura publicada entre 2012 y 2023 evidencia una tendencia creciente hacia el uso de datos reales y modelos de machine learning para detectar fraude financiero y sus distintas tipologías [4]. En particular, modelos basados en Random Forest, redes neuronales y Naive Bayes han demostrado alta capacidad discriminante sobre conjuntos de datos de cientos de miles de transferencias reales, siendo Random Forest el algoritmo más robusto al alcanzar tasas de precisión superiores al 95% en la clasificación de transacciones fraudulentas [5]. Uno de los principales desafíos metodológicos en este campo radica en la naturaleza profundamente desbalanceada de los conjuntos de datos disponibles, en los que las transacciones fraudulentas representan una minoría estadística frente al volumen total de operaciones legítimas.
+
+El presente proyecto aborda esta problemática a partir del conjunto de datos público del Banco Central Europeo, que registra estadísticas semestrales de transacciones financieras legales y fraudulentas realizadas en la Unión Europea. El análisis se estructura en tres componentes principales: un análisis exploratorio de datos univariado y bivariado orientado a caracterizar la estructura, distribución y calidad del dataset; un dashboard interactivo que permite visualizar el comportamiento de las transacciones según dimensiones temporales, geográficas y tipológicas; y un modelo predictivo de machine learning enfocado en la clasificación de transacciones fraudulentas. Este tipo de aproximaciones integrales, que articulan la exploración de datos, la visualización y el modelado predictivo, representan la dirección más relevante en la literatura reciente sobre detección de fraude financiero con técnicas de aprendizaje profundo y supervisado [6].
+
+## Objetivo del análisis {.unnumbered}
+
+### Objetivo General {.unnumbered}
+Desarrollar un dashboard analítico interactivo orientado a la visualización y exploración de los patrones de transacciones financieras en la Unión Europea, con énfasis en la identificación de variables asociadas a comportamientos fraudulentos.
+
+### Objetivos Específicos {.unnumbered}
+
+- Evaluar la calidad, cobertura y estructura del conjunto de datos mediante técnicas de análisis descriptivo y detección de valores faltantes.
+
+- Identificar y caracterizar las variables con mayor capacidad explicativa para la clasificación de transacciones fraudulentas.
+
+- Diseñar e implementar un dashboard de visualización de datos que permita explorar de manera dinámica el comportamiento de las transacciones según dimensiones temporales, geográficas y tipológicas.
+
+## Metodología {.unnumbered}
+### Origen y descripción del dataset {.unnumbered}
+
+El presente dataset muestra estadísticas de alto nivel sobre el total de transacciones financieras legales y fraudulentas realizadas en la Unión Europea. Esta información es recolectada por el Banco Central Europeo (ECB), entidad que valida semestralmente los reportes enviados por los Bancos Centrales Nacionales del continente. La última actualización fue realizada el 29 de enero del presente año y se encuentra disponible en el repositorio público de datos del ECB.
+
+### Variables, Preprocesamiento y División de los Datos {.unnumbered}
+
+Para el modelado se seleccionaron ocho variables a partir del dataset original de 29 columnas, descartando aquellas con información duplicada, documentación insuficiente o sin aporte predictivo. Las variables de entrada son siete categóricas ---`frecuencia`, `pais_origen`, `pais_destino`, `tipo_trx`, `tipo_psp`, `unidad` y `tipo_monto`--- más la variable numérica `monto_final`, que corresponde al monto de la transacción transformado mediante `log1p` para comprimir la distribución sesgada a la derecha y reducir el efecto de outliers; previamente se filtraron los registros con monto negativo, ya que ninguno presentaba fraude. La variable objetivo `tipo_fraude_bin` es binaria (1 = con fraude, 0 = sin fraude) y presenta un **desbalanceo crítico del 0.3%** de casos positivos, lo que condicionó todas las decisiones de diseño posteriores. El preprocesamiento se implementó dentro de un `ColumnTransformer` de scikit-learn ---clonado individualmente en cada pipeline mediante `clone(preprocessor)` para garantizar independencia entre experimentos--- que aplica `SimpleImputer(mediana) → StandardScaler` para la variable numérica e `SimpleImputer(moda) → OneHotEncoder(drop='first')` para las categóricas, asegurando que ningún parámetro de transformación se ajuste con información del conjunto de prueba. Los datos se dividieron en 80% entrenamiento (526.354 registros) y 20% prueba (131.589 registros) con `train_test_split` estratificado, preservando la proporción de clases en ambas particiones.
+
+### Modelos, Estrategias de Balanceo y Optimización de Hiperparámetros {.unnumbered}
+
+Se evaluaron seis algoritmos de clasificación que cubren un espectro deliberado de complejidad: **Regresión Logística** (L1/L2, solver *saga*) como baseline lineal; **Naive Bayes** implementado con `partial_fit` por lotes para manejar el volumen de datos; **LinearSVC** calibrado con `CalibratedClassifierCV` para obtener probabilidades; **XGBoost** con `tree_method='hist'` y aceleración GPU; **LightGBM** con `device='gpu'`, que ofrece tiempos de entrenamiento comparables a XGBoost con una implementación diferente del boosting por histogramas; y **Random Forest**. Cada modelo fue evaluado bajo cuatro estrategias de manejo del desbalanceo: sin balanceo, SMOTE, ADASYN y ajuste de pesos de clase (*class weights*), integradas directamente en pipelines `ImbPipeline` de imbalanced-learn para evitar data leakage durante la validación cruzada. La optimización de hiperparámetros se realizó con `RandomizedSearchCV` usando validación cruzada `StratifiedKFold` con **k=10** pliegues ---configuración más robusta que el k=5 estándar, que reduce la varianza de las estimaciones a costa de mayor tiempo de cómputo--- con distribuciones de búsqueda continuas (`loguniform`, `uniform`, `randint`). La métrica de refit para seleccionar el mejor estimador dentro de cada búsqueda fue el **F1-Score**, que actúa como métrica de optimización durante el entrenamiento por su capacidad de penalizar configuraciones extremas donde la precisión o el recall colapsan; el PR-AUC se reserva como métrica de evaluación final sobre el conjunto de prueba. La función `optimizar_modelo` incorpora además un parámetro `n_iter_override` que permite ajustar el número de iteraciones de búsqueda por modelo sin modificar la función base.
+
+### Métricas de Evaluación, Comparación Estadística e Interpretabilidad {.unnumbered}
+
+Dado el desbalanceo extremo, la métrica principal de evaluación final fue el **PR-AUC** (área bajo la curva Precision-Recall), que ignora los verdaderos negativos y mide directamente la capacidad del modelo para detectar fraudes con alta precisión; complementariamente se reportaron ROC-AUC, recall, precision y F1-score. La comparación estadística entre modelos se realizó con **Bootstrap de 1.000 iteraciones** sobre el conjunto de prueba, calculando intervalos de confianza empíricos al 95% para el PR-AUC y p-valores aproximados para diferencias de ROC-AUC entre pares. Los resultados mostraron que ninguna técnica de balanceo mejoró el PR-AUC real: SMOTE, ADASYN y class weights elevaron el recall a \~1.0 a costa de una precisión tan baja que haría inviable el sistema en producción. **Random Forest sin balanceo** obtuvo el mejor PR-AUC test (0.9659, IC=[0.9537, 0.9761]) y **XGBoost sin balanceo** alcanzó 0.9522 (IC=[0.9357, 0.9656]); ambos son estadísticamente indistinguibles en ROC-AUC (p=0.922), pero XGBoost fue seleccionado como modelo final por ser \~10 veces más rápido (55.8 s vs. 535.3 s). LightGBM se incorporó al análisis como alternativa de boosting por histogramas, permitiendo comparar directamente dos implementaciones del mismo paradigma algorítmico bajo idénticas condiciones de evaluación. Finalmente, se aplicó **LIME** (*Local Interpretable Model-agnostic Explanations*) a las tres observaciones con mayor probabilidad predicha de fraude en los modelos finalistas, revelando de forma consistente que el destino geográfico (`pais_destino_W0`) y el tipo de transacción (`tipo_trx_CP0`) son los predictores locales más fuertes de fraude, mientras que el monto tuvo un peso relativo menor al esperado.
+
+## Caracterización general {.unnumbered}
+Como veremos a continuación, el dataset cuenta con **662.616** transacciones caracterizadas en **29** columnas que serán descritas en la siguiente sección.
+
+```{r include=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(Amelia)
+datos <- read.csv("/Users/pctm/Desktop/Universidad/Sem 6/data_payments.csv")
+```
+
+```{r}
+nrow(datos)
+ncol(datos)
+colnames(datos)
+```
+
+```{r}
+str(datos)
+```
+
+### Diccionario de columnas {.unnumbered}
+
+**1. KEY:** Clave compuesta de transacción
+
+**2. FREQ:** Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.).
+
+**3. REF_AREA:** País origen de la transacción.
+
+**4. COUNT_AREA:** Institución origen de la transacción.
+
+**5. TYP_TRNSCTN:** Clasificación de la transacción (Depósito, retiro, cheques, transferencias, etc.).
+
+**6. RL_TRNSCTN:** Clasificación de la entidad procesa la transacción.
+
+**7. FRD_TYP:** Clasificación del fraude (No autorizado, tarjeta robada, sin fraude, etc).
+
+**8. TRANSFORMATION:** Transformación realizada a la transacción (niveles anuales, contribución a la tasa, promedio móvil, no aplica).
+
+**9. UNIT_MEASURE:** Unidad o divisa involucrada en la transacción.
+
+**10. TIME_PERIOD:** Año en el que se procesó la transacción.
+
+**11. OBS_VALUE:** Monto de la transacción.
+
+**12. OBS_STATUS:** Clasificación del monto de la transacción (revisado, no validado, valor provisional, etc).
+
+**13. CONF_STATUS:** Clasificación de confidencialidad (Libre, restringido, etc).
+
+**14. PRE_BREAK_VALUE:** No especificada en la documentación.
+
+**15. COMMENT_OBS:** Observaciones.
+
+**16. TIME_FORMAT:** No especificada en la documentación.
+
+**17. BREAKS:** No especificada en la documentación.
+
+**18. COMMENT_TS:** No especificada en la documentación.
+
+**19. COMPILING_ORG:** No especificada en la documentación.
+
+**20. DISS_ORG:** No especificada en la documentación.
+
+**21. TIME_PER_COLLECT:** No especificada en la documentación.
+
+**22. COVERAGE:** No especificada en la documentación.
+
+**23. DATA_COMP:** No especificada en la documentación.
+
+**24. decimales:** Indica la cantidad de decimales presentes en el monto.
+
+**25. METHOD_REF:** Metodolofia utilizada para la recolección del dato.
+
+**26. TITLE:** Descripción de transacción.
+
+**27. TITLE_COMPL:** Columna copia de TITLE.
+
+**28. UNIT:** Columna copia de UNIT_MEASURE.
+
+**29. UNIT_MULT:** Indica el multiplicador del monto de la transacción.
+
+### Comprobación de columna repetidas {.unnumbered}
+#### UNIT_MEASURE == UNIT {.unnumbered}
+```{r}
+print(identical(datos$UNIT_MEASURE, datos$UNIT))
+```
+#### TITLE == TITLE_COMPL {.unnumbered}
+```{r}
+print(identical(datos$TITLE, datos$TITLE_COMPL))
+```
+
+### Columnas a utilizar {.unnumbered}
+Si se analiza detenidamente, se encuentran varias columnas con información duplicada. Del mismo modo, hay columnas cuya información no se encuentra adecuadamente documentada dificultando así la clasificación de su impacto en el conjunto de datos. Por tanto, solo se tendrán en cuenta las columnas listadas a continuación: 
+
+**1. KEY >> clave:** Clave compuesta de transacción.
+
+**2. FREQ >> frecuencia:** Frecuencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.)
+
+**3. REF_AREA >> pais_origen:** País origen de la transacción.
+
+**4. COUNT_AREA >> pais_destino:** Institución origen de la transacción.
+
+**5. TYP_TRNSCTN >> tipo_trx :** Clasificación de la transacción (Depósito, retiro, cheques, transferencias, etc.).
+
+**6. RL_TRNSCTN >> tipo_psp :** Clasificación de la entidad procesa la transacción.
+
+**7. FRD_TYP >> tipo_fraude:** Clasificación del fraude (No autorizado, tarjeta robada, sin fraude, etc).
+
+**9. UNIT_MEASURE >> unidad:** Unidad o divisa involucrada en la transacción.
+
+**10. TIME_PERIOD >> anio:** Año en el que se procesó la transacción.
+
+**11. OBS_VALUE >> monto:** Monto de la transacción.
+
+**12. OBS_STATUS >> tipo_monto:** Clasificación del monto de la transacción (revisado, no validado, valor provisional, etc).
+
+**24. DECIMALS >> decimales:** Indica la cantidad de decimales presentes en el monto.
+
+**26. TITLE >> descripcion:** Descripción de transacción.
+
+**29. UNIT_MULT >> multiplicador_unidad:** Indica el multiplicador del monto de la transacción.
+
+
+### Dataframe resultante {.unnumbered}
+```{r}
+datos %>% 
+  select(clave=KEY, frecuencia=FREQ, pais_origen=REF_AREA, pais_destino=COUNT_AREA, tipo_trx=TYP_TRNSCTN, tipo_psp=RL_TRNSCTN, tipo_fraude=FRD_TYP, unidad=UNIT_MEASURE, anio=TIME_PERIOD, monto=OBS_VALUE, tipo_monto=OBS_STATUS, decimales=DECIMALS, descripcion=TITLE, multiplicador_unidad=UNIT_MULT) -> df
+
+kable(head(df))  %>% 
+  scroll_box(width = "100%")
+
+
+```
+
+## Identificación de valores faltantes  {.unnumbered}
+
+```{r warning=FALSE}
+
+
+missmap(df)
+```
+
+
+```{r}
+df %>%
+    summarise(across(everything(), ~ sum(is.na(.)), .names = "NA_{.col}"))
+```
+Al explorar un poco más el dataset, se encuentra que la mayoría de columnas tienen 0 valores faltantes en las observaciones. Aún así, es importante destacar que la columna monto concentra el total de missing values con 143875 NAs. El tratamiento será presentado en la siguiente sección.
+
+
+
+
+
+
+

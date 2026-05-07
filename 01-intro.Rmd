@@ -1,0 +1,895 @@
+# Analisis Univariado
+
+A continuación se procederá a examinar cada variable de forma individual con el objetivo de entender su distribución, medidas centrales y de dispersión. Para complementar el análisis utilizaremos tablas estadísticas y gráficas según se considere adecuado.
+
+## Variable objetivo: tipo_fraude {.unnumbered}
+
+#### Tabla  {.unnumbered}
+```{r include=FALSE}
+
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(Amelia)
+library(scales)
+library(scales)
+library(mice)
+library(knitr) 
+datos <- read.csv("/Users/pctm/Desktop/Universidad/Sem 6/data_payments.csv")
+
+datos %>% 
+  select(clave=KEY, frecuencia=FREQ, pais_origen=REF_AREA, pais_destino=COUNT_AREA, tipo_trx=TYP_TRNSCTN, tipo_psp=RL_TRNSCTN, tipo_fraude=FRD_TYP, unidad=UNIT_MEASURE, anio=TIME_PERIOD, monto=OBS_VALUE, tipo_monto=OBS_STATUS, decimales=DECIMALS, descripcion=TITLE, multiplicador_unidad=UNIT_MULT) -> df
+
+```
+
+```{r}
+lookupf <- tibble(
+  Categoria = c("F", "_Z"),
+  Nombre = c("Fraude", "No Fraude")
+)
+
+tabla_y <- df %>%
+  count(Categoria=tipo_fraude, name = "Fraude") %>%
+  mutate(Porcentaje = round(Fraude / sum(Fraude) * 100, 1)) %>% 
+ 
+  left_join(lookupf, by = "Categoria")  %>%
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_y) 
+
+```
+La variable **tipo_fraude** representa la clasificación del fraude indentificado en una transacción. Del total de observaciones, 660.672 no están relacionadas a un caso de fraude, mientras que 1944 transacciones fueron marcadas como movimientos fraudulentos. Debido al alto desequilibrio entre las observaciones legales y las transacciones fraudulentas se debe tener mucha precaución a la hora de construir el modelo de predicción.
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+tabla_y %>% 
+  ggplot(aes(x = Categoria, y = Fraude)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(Fraude, " (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Tipo de transacción", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+Este gráfico muestra la distribución del tipo de transacción, confirmando que la mayoria de transacciones observadas no fueron marcadas como fraude. Puntualmente el 99.7% de las transacciones fueron consideradas legales, mientras que el 0.3% fueron asociadas con algún comportamiento irregular. Esta notable diferencia indica un alto desbalance en las clases de la variable objetivo, lo cual es importante destacar al momento de construir modelos predictivos.
+
+## Variables Características Categóricas {.unnumbered}
+A continuación se examinarán detenidamente cada una de las variables.
+
+### clave {.unnumbered}
+Clave compuesta identificadora de las caracteristicas generales de una transacción. No es única.
+
+```{r}
+tabla_ID <- df %>%
+  count(Categoria=clave, name = "Frecuencia") %>% 
+  arrange(desc(Frecuencia))
+
+
+kable(head(tabla_ID))
+```
+Como se ve en la tabla, la columna **KEY** corresponde a una clave compuesta por las prinicpales caracteristicas de transacción como el tipo de monto, la unidad, tipo de fraude, etc. 
+
+### frecuencia {.unnumbered}
+Describe la recurrencia con la que se realiza determinado pago (Anual, trimestral, semestral, etc.). Se categoriza en:
+
+**- A:** Transacciones anuales
+
+**- H:** Transacciones semestrales
+
+**- Q:** Transacciones trimestrales
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_freq <- df %>%
+  count(Categoria=frecuencia, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2))
+
+kable(tabla_freq)
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_freq %>% 
+  ggplot(aes(x = factor(Categoria), y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(Frecuencia, " (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Frecuencia de transacción", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **frecuencia** del dataset, que permite caracterizar la recurrencia habitual de las transacciones. Las transacciones anuales (A) representan un 41.53% del total, mientras que la frecuencia semestral (H) y trimestral (Q) agrupan un 35.75% y 22.72%, cada una. En números exactos esto es 275.179, 236.884 y 150.553 transacciones respectivamente. 
+
+
+### pais_origen {.unnumbered}
+Presenta el código del país origen del movimiento bancario. 
+
+#### Tabla  {.unnumbered}
+
+```{r}
+
+lookup <- tibble(
+  Categoria = c("RO","HU","PL","CZ","NL","PT","LT","DE","FI","LU","GR","BE","ES","LV","IT","AT","FR","IE","CY","EE","SK","SI","MT","BG","HR","DK","U2","B0","SE"),
+  NombrePais = c("Romania","Hungary","Poland","Czech Republic","Netherlands","Portugal","Lithuania","Germany","Finland","Luxembourg","Greece","Belgium","Spain","Latvia","Italy","Austria","France","Ireland","Cyprus","Estonia","Slovakia","Slovenia","Malta","Bulgaria","Croatia","Denmark","Euro Area changing composition","EU changing composition","Sweden")
+)
+
+tabla_country <- df %>%
+  count(Categoria=pais_origen, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+ 
+  left_join(lookup, by = "Categoria")  %>%
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_country) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_country %>% 
+  ggplot(aes(x = Frecuencia, y = Categoria)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = 0.3, hjust=-0.1, size = 2) +
+ 
+  scale_x_continuous(labels = comma) +
+  labs(x = "Núm. de transacciones", y = "País") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **pais_origen** del dataset, que permite caracterizar el origen de las transacciones. A simple vista se puede notar que los países tienen frecuencias muy similares, no hay único país que destaque de forma dominante frente a los demás. Romania, Hungría, Polonia, República Checa y Paises bajos son los 5 territorios con el porcentaje de origen más alto superior al 4% cada uno. Por otro lado, encontramos entidades especiales como la "Euro Area changing composition" y "EU changing composition" que presentan una baja frecuencia frente a otros mercados (menos del 1%). 
+
+> **Euro Area changing composition/EU changing composition**: hace referencia a países que han sido incluidos/excluidos de la zona del euro o en la unión europea en el transcurso de los años. Por ejemplo, Grecia se incorporó al uso del euro en el año 2000, mientras que Groenlandia que se retiró de la Unión Europea (anteriormente Comunidad Europea) en 1985. 
+
+### pais_destino {.unnumbered}
+Presenta el código del país destino del movimiento bancario. 
+
+#### Tabla  {.unnumbered}
+
+```{r}
+
+lookup_org <- tibble(
+  Categoria = c("W0","W1","W2","G1","SE","DK","BG","GR","AT","BE","SI","SK","CY","ES","FI","FR","IT","DE","IE","EE","LU","MT","LV","HR","LT","PT","CZ","PL","HU","RO","NL","G3","NO","IS","LI","AR","AU","BR","CA","CN","GB","ID","IN","JP","KR","MX","RU","SA","TR","US","ZA"),
+  NombrePais = c("World","Rest of the World","Domestic (home or reference area)","Extra EEA","Sweden","Denmark","Bulgaria","Greece","Austria","Belgium","Slovenia","Slovakia","Cyprus","Spain","Finland","France","Italy","Germany","Ireland","Estonia","Luxembourg","Malta","Latvia","Croatia","Lithuania","Portugal","Czech Republic","Poland","Hungary","Romania","Netherlands","Other EEA countries (all countries excluding the reference area)","Norway","Iceland","Liechtenstein","Argentina","Australia","Brazil","Canada","China","United Kingdom","Indonesia","India","Japan","Korea, Republic of","Mexico","Russian Federation","Saudi Arabia","Turkey","United States","South Africa")
+)
+
+tabla_country_dest <- df %>%
+  count(Categoria=pais_destino, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+ 
+  left_join(lookup_org, by = "Categoria")  %>%
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_country_dest) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_country_dest %>% 
+  ggplot(aes(x = Frecuencia, y = Categoria)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = 0.5, hjust=-0.1, size = 1.8) +
+ 
+  scale_x_continuous(labels = comma) +
+  labs(x = "Núm. de transacciones", y = "pais_destino") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 6)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **pais_destino** del dataset, que permite caracterizar el destino de las transacciones. Empezamos destacando que el 22.54% de las transacciones no especifican el destino final si no que generalizan en entidades como World, Rest of the World, Domestic y Extra EEA cada una con una representación del 13%, 3.28%, 3.25% y 2.62%. Para los paises europeos explicitamente listados se manejan porcentajes de representación del 2% cada uno aproximadamente. Mientras que, los paises destino fuera de la EEA comprenden menos del 1% cada uno. 
+
+
+> **World:** Hace referencia a todo el conjunto de pais e instituciones existentes, incluyendo al país de referencia.
+>
+>**Rest of the world**: Hace referencia a todo el conjunto de pais e instituciones existentes, excluyendo al país de origen.
+>
+>**Domestic:** Hace referencia a las entidades dentro del territorio economico de un país
+>
+>**Extra EEA:** Hace referencia a los demás paises y entidades del Espacio Económico Europeo, incluyendo Noruega, Islandia y Liechtenstein.
+>
+>**Other EEA countries (all countries excluding the reference area):** Hace referencia a los demás paises y entidades del Espacio Económico Europeo excluyendo al país de origen
+
+
+### tipo_trx {.unnumbered}
+Describe el tipo de movimiento bancario realizado.
+
+#### Tabla  {.unnumbered}
+
+```{r}
+lookup_instrument <- tibble(
+  Categoria = c("CHQ","CP0","CT0","CW1","DD","EMP0","MREM","ND0","ND1","ND2","ND3","SER","TOTL","TOTL1"),
+  NombreInstrumento = c(
+    "Cheques",
+    "Card payments",
+    "Credit transfers",
+    "Cash withdrawals using cards",
+    "Direct debits",
+    "E-money payments",
+    "Money remittances",
+    "Other services (not included in Directive (EU) 2013/2466)",
+    "Credits to the accounts by simple book entry",
+    "Debits from the accounts by simple book entry",
+    "Other services than credits and debits from the accounts by simple book entry",
+    "Other payment services",
+    "Total payment transactions",
+    "Total payment transactions, excluding cash withdrawals"
+  )
+)
+
+tabla_typetrx <- df %>%
+  count(Categoria=tipo_trx, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+ 
+  left_join(lookup_instrument, by = "Categoria")  %>%
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_typetrx) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_typetrx %>% 
+  ggplot(aes(x = factor(Categoria), y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = -0.5, size = 2.2) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Tipo de transacción", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **tipo_trx** del dataset, que permite caracterizar el movimiento bancario realizado y su instrumento. Los debitos directos y transferencias de credito son las categorías más grandes con un porcentaje del 14.59% cada una, seguida por pagos electronicos (13.91%) y cheques (9.02%). El pago por tarjetas de credito predomina ligeramente sobre otros servicios de pago, observandose un 9.02% sobre un 8.60%. Con aproximadamente un 1% de participación la categorías ND* son marginales y podría considerarse su agrupación. Mientras que las columnas de TOTL y TOLT representan rotales agregados, no instrumentos individuales. 
+
+### tipo_psp {.unnumbered}
+Caracteriza al proveedor que realiza la transacción. Se categoriza en:
+
+**- 1 Payer's PSP:** Proveedor de servicios de pago del pagador. Entidad que procesa el pago de quien envía el dinero.
+
+**- 2 Payee's PSP:** Proveedor de servicios de pago del beneficiario. Entidad que procesa el pago de quien recibe el dinero.
+
+**- _Z NA:** Transacciones sin rol definifido o internas.
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_psp <- df %>%
+  count(Categoria=tipo_psp, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2))
+
+kable(tabla_psp)
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_psp %>% 
+  ggplot(aes(x = factor(Categoria), y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(Frecuencia, " (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Tipo de transacción", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 14) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **tipo_psp** del dataset, que permite caracterizar el rol de la transacción. El 58.51% de las transacciones se registraron desde el psp del pagador, esto es 387.724, frente a 270.818 o 40.87% asociadas al psp del beneficiario. Por otro lado, se tiene un 0.61% de transacciones no asociadas a ninguna de las clasificaciones anteriores, quizá por tratarse de movimientos monetarios internos.
+
+### unidad {.unnumbered}
+Unidad o divisa involucrada en la transacción.
+
+#### Tabla  {.unnumbered}
+
+```{r}
+
+lookup_currency <- tibble(
+  Categoria = c("PN","EUR","XDF","PN_R_POP","EUR_R_POP","EUR_R_TT","PN_R_TT",
+                "EUR_R_PNT","EUR_R_B1GQ","XDF_R_TT","XDF_R_PNT","XDF_R_POP",
+                "PN_R_POP6","EUR_R_POP6","XDF_R_POP6"),
+  NombreUnidad = c(
+    "Pure number",
+    "Euro",
+    "Domestic currency (incl. conversion to current currency made using a fixed parity or market exchange rate)",
+    "Pure number per capita",
+    "Euro per capita",
+    "Euro; ratio to total value payment transactions",
+    "Pure number; ratio to total number payment transactions",
+    "Euro; ratio to number of transactions",
+    "Euro; ratio to gross domestic product",
+    "Domestic currency; ratio to total value payment transactions",
+    "Domestic currency; ratio to number of transactions",
+    "Domestic currency per capita",
+    "Pure number per million inhabitants",
+    "Euro per million inhabitants",
+    "Domestic currency per million inhabitants"
+  )
+)
+
+tabla_unit <- df %>%
+  count(Categoria=unidad, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+ 
+  left_join(lookup_currency, by = "Categoria")  %>%
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_unit) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_unit %>% 
+  ggplot(aes(x = Frecuencia, y = Categoria)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = 0.5, hjust=-0.1, size = 2.2) +
+ 
+  scale_x_continuous(labels = comma) +
+  labs(x = "Núm. de transacciones", y = "unidad") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 7)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **unidad** del dataset, que permite caracterizar el tipo de unidad o medida en la que se reporta una observación. Destacan los grupos PN (número puro o conteo), EUR y XDF (Divisa domestica) con un 44.75%, 39% y 9.22% respectivamente. Adicionalmente, se presentan ratios por total de habitantes, número de transacciones, toal de transacciones, entre otros, en menor proporción. Carece de sentido realizar comparaciones directas entre las distintas series, se debe realizar una transformación para que puedan trabajarse de forma equivalente.
+
+### anio {.unnumbered}
+Año en el que se procesó la transacción.
+
+#### Tabla  {.unnumbered}
+
+```{r}
+
+tabla_country_year <- df %>% 
+  filter(str_length(as.character(anio)) == 4) %>% 
+  count(Categoria=anio, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2))
+  
+
+kable(tabla_country_year) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_country_year %>% 
+  ggplot(aes(x = Frecuencia, y = Categoria)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Frecuencia, ")")), vjust = 0.5, hjust=-0.1, size = 1.8) +
+ 
+  scale_x_continuous(labels = comma) +
+  labs(x = "Núm. de transacciones", y = "anio") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 6)  
+  )
+```
+
+La tabla anterior describen la distribución de la variable **anio** del dataset, que permite caracterizar el destino año o periodo de tiempo en el que se procesaron las transacciones.  A simple vista se nota que hay años representados solos, por trimestre o semestre. Es importante notar que estas divisiones no representan acumulados entre si, solo son categorías distintas de registro. Se nota progresivamente el incremento en movimientos bancarios desde el año 2000, destacandose el incremento exponencial a partir del año 2014. Los últimos 5 años han marcado records historicos en total de transacciones registradas.
+
+### tipo_monto {.unnumbered}
+Presenta la clasificación del monto de la transacción (revisado, no validado, valor provisional, etc). Se categoriza de la siguiente forma: 
+
+**- A:** Valor normal.
+
+**- Q** Valor faltante, suprimido.
+
+**- M:** Valor faltante, dato no puede existir.
+
+**- P** Valor temporal.
+
+**- L** Valor faltante, dato existente pero no pudo ser recolectado.
+
+**- E** Valor estimado
+
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_type_amount <- df %>%
+  count(Categoria=tipo_monto, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+  mutate(Categoria = factor(Categoria, levels = Categoria)) 
+  
+
+kable(tabla_type_amount) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_type_amount %>% 
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Tipo de monto", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **tipo_monto** del dataset, que permite caracterizar la validez del monto registrado en la columna monto. De forma general vemos que el 72.86% de las observaciones fueron clasificadas como A, es decir, el monto fue validado correctamente. Mientras que el 28% restante presentan un monto poco fiable que pudo haber sido suprimido, estimado, no recolectado, etc. 
+
+
+### decimales {.unnumbered}
+Indica la cantidad de decimales presentes en el monto.
+
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_decimals_amount <- df %>%
+  count(Categoria=decimales, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) 
+  
+
+kable(tabla_decimals_amount) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_decimals_amount %>% 
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(" (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Decimales", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **decimales** del dataset, que permite caracterizar la cantidad de decimales en la columna monto. Resulta de utilidad pues será relacionada con la columna multiplicador_unidad. Vemos que el 90.72% de los montos tienen 3 unidades decimales, frente al casi 10% restante que tiene 2.
+
+
+### descripcion {.unnumbered}
+Descripción de la transacción.
+
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_description <- df %>%
+  count(Categoria=descripcion, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) %>% 
+  slice_head(n = 10)
+  
+
+kable(tabla_description)
+```
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_description %>% 
+  ggplot(aes(y = factor(Categoria), x = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(Frecuencia, " (", Porcentaje, "%)")), vjust = 0.5, hjust=-0.01, size = 2.5) +
+ 
+  scale_x_continuous(labels = comma) +
+  labs(x = "Núm. de transacciones", y = "descripcion") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 7)  
+  )
+```
+Esta variable corresponde a un mensaje corto asociado a cada una de las transacciones, debido a la gran diversidad de entradas, solamente se mostrarán las más frecuentes como lo fueron "Card payments, sent", "Cheques, sent", "Credit transfers, sent", "Direct debits, sent" con más de 3000 apariciones. 
+
+### multiplicador_unidad {.unnumbered}
+Indica el multiplicador del monto de la transacción.
+
+
+#### Tabla  {.unnumbered}
+
+```{r}
+tabla_mulp_amount <- df %>%
+  mutate(multiplicador_unidad = case_when(
+    is.na(multiplicador_unidad) ~ as.integer(NA),  
+    multiplicador_unidad == 0 ~ 1L,                
+    TRUE ~ as.integer(multiplicador_unidad)
+  )) %>%
+  count(Categoria=multiplicador_unidad, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2)) %>% 
+  arrange(desc(Frecuencia)) 
+  
+
+kable(tabla_mulp_amount) %>% 
+  scroll_box(width = "100%", height = "400px")
+```
+
+```{r include=FALSE}
+df <- df %>%
+  mutate(multiplicador_unidad = case_when(
+    is.na(multiplicador_unidad) ~ as.integer(NA),
+    multiplicador_unidad == 0   ~ 1L,
+    TRUE             ~ as.integer(multiplicador_unidad)
+  ))
+```
+
+
+#### Gráfico  {.unnumbered}
+
+```{r}
+# Gráfico
+tabla_mulp_amount %>% 
+  ggplot(aes(x = Categoria, y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = paste0(Frecuencia, " (", Porcentaje, "%)")), vjust = -0.5, size = 3) +
+ 
+  scale_y_continuous(labels = comma) +
+  labs(x = "Decimales", y = "Núm. de transacciones") +
+ 
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    axis.text.y = element_text(size = 8)  
+  )
+```
+
+La tabla y gráfico anteriores describen la distribución de la variable **multiplicador_unidad** del dataset, que permite caracterizar el multiplicador aplicado a la columna monto. Vemos que el 90.72% de los montos representado por un multiplicador de 6, es decir, millones, frente al casi 10% agrupado por 0, asociado a unidades.
+
+## Variables Características Numéricas {.unnumbered}
+### monto {.unnumbered}
+
+#### Tabla  {.unnumbered}
+
+```{r}
+
+tabla_monto <- df %>% 
+  select(pais_origen, monto, multiplicador_unidad, decimales, tipo_monto, unidad) %>% 
+  mutate(monto_real=monto*10^(multiplicador_unidad-decimales))
+  
+
+kable(head(tabla_monto, 15))
+```
+
+Como se ilustró anteriormente, los distintos tipos de unidad hacen que sea necesario dividir el análisis de esta variable en 3 categorías principales: PN, EUR y XDF
+
+##### PN  {.unnumbered}
+```{r}
+tabla_monto_normal <- tabla_monto %>% 
+  filter(unidad == "PN")
+
+kable(head(tabla_monto_normal))
+  
+```
+
+```{r}
+
+tabla_monto_normal %>%
+  summarise(
+    n = n(),
+    n_missing = sum(is.na(monto_real)),
+    pct_missing = round(n_missing / n * 100, 2),
+    media = mean(monto_real, na.rm = TRUE),
+    ds = sd(monto_real, na.rm = TRUE),
+    mediana = median(monto_real, na.rm = TRUE),
+    minimo = min(monto_real, na.rm = TRUE),
+    maximo = max(monto_real, na.rm = TRUE),
+    Q1 = quantile(monto_real, 0.25, na.rm = TRUE),
+    Q3 = quantile(monto_real, 0.75, na.rm = TRUE),
+    IQR = IQR(monto_real, na.rm = TRUE)
+  )
+```
+La variable monto filtrada por PN fue analizada a partir de 296.348 observaciones. El total de datos faltantes corresponde a 66.013 observaciones, aproximadamente un 22% del total. Se obtuvo un promedio de 184.654 pn con una desviación estándar de 2.786.927, donde el 50% de los totales está por debajo de 20. El valor minimo fue aproximadamente de -10 y el máximo fue de 207.701.558 pn. El 25% de los datos son inferiores a 0 y el 75% menores a 1248. Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas. 
+
+```{r warning=FALSE}
+tabla_monto_normal %>%
+  ggplot(aes(x = "", y = monto_real)) +
+  geom_boxplot(fill = "#a6cee3", color = "#1f78b4", outlier.color = "red") +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 20,
+    size = 3,
+    color = "black"
+  ) +
+  labs(
+    title = "Diagrama de cajas y bigotes",
+    x = "",
+    y = "Núm. de trasacciones"
+  ) +
+  theme_bw()
+```
+La distibución de monto para el tipo PN es altamente asimetrica, con fuerte concentración de valores bajos y una cantidad significativa de valores extremos altos. Esto indica que aunque la mayoría de las transacciones tienen totales moderados, existen algunas con totales excepcionalmente altos que influyen notablemente en los estadísticos como la media y la desviación estándar.
+
+##### EUR  {.unnumbered}
+```{r}
+tabla_monto_eur <- tabla_monto %>% 
+  filter(unidad == "EUR")
+
+kable(head(tabla_monto_eur))
+  
+```
+
+```{r}
+
+tabla_monto_eur %>%
+  summarise(
+    n = n(),
+    n_missing = sum(is.na(monto_real)),
+    pct_missing = round(n_missing / n * 100, 2),
+    media = mean(monto_real, na.rm = TRUE),
+    ds = sd(monto_real, na.rm = TRUE),
+    mediana = median(monto_real, na.rm = TRUE),
+    minimo = min(monto_real, na.rm = TRUE),
+    maximo = max(monto_real, na.rm = TRUE),
+    Q1 = quantile(monto_real, 0.25, na.rm = TRUE),
+    Q3 = quantile(monto_real, 0.75, na.rm = TRUE),
+    IQR = IQR(monto_real, na.rm = TRUE)
+  )
+```
+
+La variable monto filtrada por EUR fue analizada a partir de 258.391 observaciones. El total de datos faltantes corresponde a 55.972 observaciones, aproximadamente un 22% del total. Se obtuvo un promedio de 353.443.535 euros con una desviación estándar de 5.407.405.070, donde el 50% de los montos está por debajo de 27.290.83 euros. El valor minimo fue aproximadamente de -10 y el máximo fue de 263.423.125.212 euros El 25% de los datos son inferiores a 3.68 euros y el 75% menores a 1.656.369 Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas. 
+
+```{r warning=FALSE}
+tabla_monto_eur %>%
+  ggplot(aes(x = "", y = monto_real)) +
+  geom_boxplot(fill = "#a6cee3", color = "#1f78b4", outlier.color = "red") +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 20,
+    size = 3,
+    color = "black"
+  ) +
+  labs(
+    title = "Diagrama de cajas y bigotes",
+    x = "",
+    y = "Núm. de trasacciones"
+  ) +
+  theme_bw()
+```
+
+##### XDF  {.unnumbered}
+```{r}
+tabla_monto_xdf <- tabla_monto %>% 
+  filter(unidad == "XDF")
+
+kable(head(tabla_monto_xdf))
+  
+```
+
+```{r}
+
+tabla_monto_xdf %>%
+  summarise(
+    n = n(),
+    n_missing = sum(is.na(monto_real)),
+    pct_missing = round(n_missing / n * 100, 2),
+    media = mean(monto_real, na.rm = TRUE),
+    ds = sd(monto_real, na.rm = TRUE),
+    mediana = median(monto_real, na.rm = TRUE),
+    minimo = min(monto_real, na.rm = TRUE),
+    maximo = max(monto_real, na.rm = TRUE),
+    Q1 = quantile(monto_real, 0.25, na.rm = TRUE),
+    Q3 = quantile(monto_real, 0.75, na.rm = TRUE),
+    IQR = IQR(monto_real, na.rm = TRUE)
+  )
+```
+
+La variable monto filtrada por EUR fue analizada a partir de 61.103 observaciones. El total de datos faltantes corresponde a 17.562	 observaciones, aproximadamente un 29% del total. Se obtuvo un promedio de 5.685.471.097 XDF con una desviación estándar de 75.176.776.461, donde el 50% de los montos está por debajo de 38.552 XDF. El valor minimo fue aproximadamente de -10 y el máximo fue de 2.950583e+12 XDF. El 25% de los datos son inferiores a 0 XDF y el 75% menores a 9.495.258 XDF. Como se ve, se encuentra un porcentaje llamativo de datos negativos, probablemente relacionados a saldos pendientes o deudas. 
+
+```{r warning=FALSE}
+tabla_monto_xdf %>%
+  ggplot(aes(x = "", y = monto_real)) +
+  geom_boxplot(fill = "#a6cee3", color = "#1f78b4", outlier.color = "red") +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 20,
+    size = 3,
+    color = "black"
+  ) +
+  labs(
+    title = "Diagrama de cajas y bigotes",
+    x = "",
+    y = "Núm. de trasacciones"
+  ) +
+  theme_bw()
+```
+La distibución de monto para el tipo XDF es altamente asimetrica, con fuerte concentración de valores bajos y una cantidad significativa de valores extremos altos. Esto indica que aunque la mayoría de las transacciones tienen totales moderados, existen algunas con totales excepcionalmente altos que influyen notablemente en los estadísticos como la media y la desviación estándar.  
+
+### Tratamiento de datos faltantes para la variable "monto"   
+
+En la variable monto, el 21.71% de las observaciones corresponden a valores faltantes. En este caso, no se imputará con las medidas de tendencia central porque generaría un cambio en la distribución de la variable "monto", por tanto, la imputación se realizará con haciendo uso de un modelo de Machine Learning, en este caso, será buscará el mejor modelo entre: KNN, Ridge, BayesianRidge, Random Forest, XGBoost y regresión de vectores de soporte.      
+
+
+En esta parte se hizo el modelo en python, entonces se importarán a R los resultados en archivos .pkl y .csv.  
+
+```{r metricas}
+metricas <- read.csv("metricas_modelo.csv")
+kable(metricas, digits = 4)
+```
+
+## Predicciones vs Valores reales {.unnumbered}
+```{r predicciones, warning=FALSE}
+resultados <- read.csv("predicciones_test.csv")
+
+# Muestra para que el plot no quede saturado
+set.seed(42)
+resultados_plot <- resultados[sample(nrow(resultados), 2000), ]
+
+ggplot(resultados_plot, aes(x = y_real, y = y_predicho)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed") +
+  labs(title = "Real vs Predicho", x = "Valor real", y = "Valor predicho") +
+  theme_minimal()
+```
+
+Ya tenemos el mejor modelo para predecir la variable numérica "monto" con respecto a las demás variables, en este caso, se excluyó del modelo las variables con muchas categorias diferentes como es el caso de "clave". Ahora, se imputarán los datos faltantes de monto y se observará si cambió la distribución de esta variable.    
+
+
+```{r imputacion}
+df_final <- read.csv("df_final.csv")
+```
+
+```{r distribucion, warning=FALSE}
+df_plot <- data.frame(
+  valor = df_final$monto,
+  tipo  = "Original (con NA)"
+)
+
+df_plot2 <- data.frame(
+  valor = df_final$monto_final,
+  tipo  = "Después de Imputación (RF)"
+)
+
+df_kde <- bind_rows(df_plot, df_plot2)
+df_kde <- df_kde[!is.na(df_kde$valor), ]
+
+df_kde$tipo <- factor(
+  df_kde$tipo,
+  levels = c("Original (con NA)", "Después de Imputación (RF)")
+)
+
+ggplot(df_kde, aes(x = valor, color = tipo, linetype = tipo)) +
+  geom_density(linewidth = 0.9) +
+  scale_color_manual(values = c("Original (con NA)" = "skyblue",
+                                "Después de Imputación (RF)" = "orange")) +
+  scale_linetype_manual(values = c("Original (con NA)" = "solid",
+                                   "Después de Imputación (RF)" = "dashed")) +
+  labs(title   = "Impacto de la Imputación Random Forest en la Distribución de 'Monto'",
+       x       = "Monto",
+       y       = "Densidad",
+       color   = "Estado del Dataset",
+       linetype = "Estado del Dataset") +
+  theme_minimal() +
+  theme(panel.grid = element_line(alpha = 0.3))
+```
+
+```{r mannwhitney, warning=FALSE}
+original <- df_final$monto[!is.na(df_final$monto)]
+imputado <- df_final$monto_final[is.na(df_final$monto)]
+
+test <- ks.test(original, imputado)
+cat("Estadístico D:", test$statistic, "\n")
+cat("p-valor:",       test$p.value,   "\n")
+
+alpha <- 0.05
+if (test$p.value < alpha) {
+  cat("Las distribuciones son significativamente diferentes\n")
+} else {
+  cat("No hay evidencia de diferencia en las distribuciones\n")
+}
+```
+
+Para el tratamiento de los valores faltantes en la variable monto, se implementó un modelo de regresión basado en Random Forest, el cual permite capturar relaciones no lineales y patrones complejos entre múltiples variables categóricas del conjunto de datos. Previamente, se realizó una normalización del monto utilizando las variables decimales y multiplicador_unidad, con el fin de garantizar coherencia en la escala y evitar inconsistencias en los valores estimados.   
+
+La imputación con Random Forest es robusta y está bien sustentada por tres líneas de evidencia convergentes. Primero, el modelo tiene poder predictivo real con R² = 0.862, lo que descarta que los valores imputados sean aproximaciones toscas. Segundo, el estadístico D = 0.054 de KS indica que la distribución acumulada no se desplaza más de 5.4 puntos porcentuales en ningún punto, una diferencia pequeña que en la práctica no distorsiona análisis descriptivos, segmentaciones ni modelos posteriores que usen monto. Tercero, los estadísticos robustos de la tabla (Q1, Q3, máximo) son prácticamente idénticos entre monto y monto_final, lo que confirma que la imputación no introdujo outliers artificiales ni alteró la estructura de los cuantiles.   
+
+El único efecto observable y esperado es la compresión leve de la media y la desviación estándar, consecuencia directa del mecanismo de Random Forest de promediar árboles — un modelo que por diseño no puede predecir valores más extremos que los que vio en entrenamiento. Para el 21.71% de datos faltantes, este es un trade-off aceptable y estándar en la literatura de imputación con modelos de ensamble.  
