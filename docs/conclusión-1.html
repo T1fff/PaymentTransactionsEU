@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Detección de Fraude en Transacciones de Pago de la Unión Europea.</title>
+  <title>Chapter 5 Conclusión | Detección de Fraude en Transacciones de Pago de la Unión Europea.</title>
   <meta name="description" content="Se presenta el análisis exploratorio inicial del dataset escogido sobre transacciones bancarias presentadas por los bancos centrales de la Unión Europea" />
   <meta name="generator" content="bookdown 0.46 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Detección de Fraude en Transacciones de Pago de la Unión Europea." />
+  <meta property="og:title" content="Chapter 5 Conclusión | Detección de Fraude en Transacciones de Pago de la Unión Europea." />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Se presenta el análisis exploratorio inicial del dataset escogido sobre transacciones bancarias presentadas por los bancos centrales de la Unión Europea" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Detección de Fraude en Transacciones de Pago de la Unión Europea." />
+  <meta name="twitter:title" content="Chapter 5 Conclusión | Detección de Fraude en Transacciones de Pago de la Unión Europea." />
   
   <meta name="twitter:description" content="Se presenta el análisis exploratorio inicial del dataset escogido sobre transacciones bancarias presentadas por los bancos centrales de la Unión Europea" />
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="modelo-para-detección-de-fraude.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -261,18 +261,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="conclusión-1" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Conclusión<a href="conclusión-1.html#conclusi%C3%B3n-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>El anterior análisis permitió conocer a profundidas caracteristicas generales del dataset escogido tales como número de observaciones y variables estudiandes. De la misma manera, permitió estudiar el posible impacto en este proyecto de cada una de las columnas listadas, pues, fuera por falta de documentación en la funete original o duplicación de información, no todas eran aptas de ser incluidas. En un reconocimiento inicial se vio que la variable objetivo <strong>tipo_fraude</strong>, se encuentra desbalanceada a favor de observaciones que no presentaron fraude, de la misma forma, se pudo conocer a grandes rasgos, la distribución particular de las variables presentes en los datos como los países origen, destino, año de origen, monto o conteo, tipo de unidad, tipo de multiplicador, tipo de psp, descripción, por mencionar algunas.</p>
+<p>Al compara los tipos de fraude con las diferentes variables se encontró que existe dependencia en la mayoría de casos. Aún así, es importante resaltar que los fraudes se concentran en categorías muy particulares, por ejemplo, en solo una de las categorías de la variable frecuencia se encontraron casos de fraude. Por otro lado, en la variable monto se encontró diferencias significativas entre el grupo en el que se identifica fraude y el grupo en el que no. Los montos suelen ser menores en las transacciones fraudulentas que en las que no lo son.</p>
+<div id="referencias" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Referencias<a href="conclusión-1.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://www.ecb.europa.eu/ecb-and-you/explainers/tell-me/html/what-is-t2.en.html">1. Banco Central Europeo. (2025). What is T2?</a></p>
+<p><a href="https://www.ecb.europa.eu/press/pr/date/2025/html/ecb.pr251215~e133d9d683.en.html">2. European Banking Authority &amp; European Central Bank. (2025). 2025 Report on Payment Fraud.</a></p>
+<p><a href="https://www.bde.es/wbe/en/entidades-profesionales/operativa-gestiones/sistemas-pago-infraestructuras/target-banco-espana/">3. Banco de España. (2023). TARGET. Sistema de liquidación bruta en tiempo real.</a></p>
+<p><a href="https://doi.org/10.1057/s41599-024-03606-0">4. Sánchez-Aguayo, M., Urda, D., &amp; Jerez, J. M. (2024). Financial fraud detection through the application of machine learning techniques: a literature review. Humanities and Social Sciences Communications, 11, 1130.</a></p>
+<p><a href="https://doi.org/10.1080/23311975.2025.2474209">5. Albert, J. F., et al. (2025). Comparative analysis of machine learning models for the detection of fraudulent banking transactions. Cogent Business &amp; Management, 12(1).</a></p>
+<p><a href="https://www.sciencedirect.com/science/article/pii/S2666764925000372">6. Chen, Y., et al. (2025). Deep learning in financial fraud detection: Innovations, challenges, and applications. Computers &amp; Security.</a></p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="modelo-para-detección-de-fraude.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
@@ -304,7 +313,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/%s",
+    "link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-conclusion.Rmd",
     "text": "Edit"
   },
   "history": {
